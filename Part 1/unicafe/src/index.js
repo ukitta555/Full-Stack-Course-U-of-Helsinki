@@ -5,9 +5,12 @@ const Statistic = ({text, value}) =>
 {
   if (text === "positive")
   {
-    return (<p> {text} {value}% </p>)
+    return (<tr>
+            <td>{text}</td>
+            <td>{value}%</td>
+            </tr>)
   }
-  else return (<p> {text} {value} </p>)
+  else return (<tr><td>{text}</td><td>{value}</td></tr>)
 } 
 
 const Statistics = ({good, neutral, bad, averageScore, positivePercentage, reviews}) =>
@@ -25,12 +28,16 @@ const Statistics = ({good, neutral, bad, averageScore, positivePercentage, revie
     return (
       <>
       <h1> Stats </h1>
+      <table>
+      <tbody>
       <Statistic text = "good"  value = {good} />
       <Statistic text = "neutral"  value = {neutral} />
       <Statistic text = "bad" value = {bad} />
       <Statistic text = "all" value = {good + neutral + bad} />
       <Statistic text = "average" value ={averageScore()} />
       <Statistic text = "positive" value = {positivePercentage()*100} />
+      </tbody>
+      </table>
       </>
     )
   }
