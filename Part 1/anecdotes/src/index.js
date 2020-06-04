@@ -11,6 +11,7 @@ const App = (props) => {
   let dummyArray = new Array(anecdotes.length).fill(0, 0, anecdotes.length)
   const [selected, setSelected] = useState(0)
   const [votes, setVotes] = useState(dummyArray)
+  const [best, setBest] = useState(0)
   const randomNumber = () => 
   {
     let number = Math.floor (Math.random() * anecdotes.length) 
@@ -26,17 +27,24 @@ const App = (props) => {
   {
      const copiedArray = Array.from(votes)
      copiedArray[selected] += 1
+     if (copiedArray[best] < copiedArray[selected])
+     {
+       setBest(selected)
+     }
      setVotes(copiedArray)
   }
 
   return (
     <div>
+      <h1> Anecdote of the day </h1>
       {props.anecdotes[selected]}
       <p> has {votes[selected]} votes</p>
       <p>
       <Button handleClick = {handleClickNextAnecdote} text = "Next anecdote"/>
       <Button handleClick = {handleClickVote} text = "vote"/>
       </p>
+      <h1> Anecdote with most votes </h1>
+      {props.anecdotes[best]}
     </div>
   )
 }
