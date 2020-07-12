@@ -14,8 +14,15 @@ const App = () => {
   }
   const addNumber = (event) => {
     event.preventDefault()
-    setPersons (persons.concat({name: newName, id: persons.length + 1}))
-    setNewName('')
+    if (persons.map(person => person.name.toLocaleLowerCase())
+                .indexOf(newName) != -1)
+    {
+        alert (`${newName} is already present in phonebook`)
+    } else 
+    {
+        setPersons (persons.concat({name: newName, id: persons.length + 1}))
+        setNewName('')
+    }            
   }
   return (
     <div>
