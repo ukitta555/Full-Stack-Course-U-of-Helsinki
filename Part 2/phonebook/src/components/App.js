@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import personService from '../services/persons'
 import Persons from './Persons'
 import Filter from './Filter'
 import PersonForm from './PersonForm'
@@ -12,23 +12,16 @@ const App = () => {
 
   useEffect( () => 
                   { 
-                    axios.get('http://localhost:3001/persons')
-                        .then(response => setPersons(response.data))
+                    personService
+                    .getAll()
+                    .then(persons => setPersons(persons))
                   } 
            , [])
 
-  const changeFilter = (event) => {
-    console.log (event.target.value)
-    setFilter(event.target.value)
-  }
-  const changeNameInput = (event) => {
-    console.log(event.target.value)
-    setNewName(event.target.value)
-  }
-  const changePhoneInput = (event) => {
-    console.log(event.target.value)
-    setNewPhoneNumber(event.target.value)
-  }
+  const changeFilter = event => setFilter(event.target.value)
+  const changeNameInput = event => setNewName(event.target.value)
+  const changePhoneInput = event => setNewPhoneNumber(event.target.value)
+  
   const addNumber = (event) => {
     event.preventDefault()
     if (newName === '' || newPhoneNumber === '')
@@ -45,15 +38,14 @@ const App = () => {
                         name: newName,
                         phone: newPhoneNumber,
                        }
-      axios.post(`http://localhost:3001/persons`, newEntry)
-           .then(response => 
-                            {
-                              console.log (response)
-                              setPersons (persons.concat(response.data))
-                              setNewName('')
-                              setNewPhoneNumber('')
-                            }
-                )
+      personService.addPerson(newEntry)
+                    .then(entry => 
+                                      {
+                                        setPersons (persons.concat(entry))
+                                        setNewName('')
+                                        setNewPhoneNumber('')
+                                      }
+                          )
     }            
   }
   return (
