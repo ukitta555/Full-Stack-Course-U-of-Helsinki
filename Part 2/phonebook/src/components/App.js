@@ -33,20 +33,27 @@ const App = () => {
     event.preventDefault()
     if (newName === '' || newPhoneNumber === '')
     {
-        alert (`You haven't filled all the fields yet.`)
+      alert (`You haven't filled all the fields yet.`)
     } else if (persons.map
                 (person => person.name.toLocaleLowerCase())
                 .indexOf(newName) !== -1)
     {
-        alert (`${newName} is already present in phonebook`)
+      alert (`${newName} is already present in phonebook`)
     } else 
     {
-        setPersons (persons.concat({name: newName,
-                                    id: persons.length + 1,
-                                    phone: newPhoneNumber 
-                                  }))
-        setNewName('')
-        setNewPhoneNumber('')
+      const newEntry = {
+                        name: newName,
+                        phone: newPhoneNumber,
+                       }
+      axios.post(`http://localhost:3001/persons`, newEntry)
+           .then(response => 
+                            {
+                              console.log (response)
+                              setPersons (persons.concat(response.data))
+                              setNewName('')
+                              setNewPhoneNumber('')
+                            }
+                )
     }            
   }
   return (
