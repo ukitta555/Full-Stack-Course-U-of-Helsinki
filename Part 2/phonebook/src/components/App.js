@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import personService from '../services/persons'
+import personService from '../services/personsBackend'
 import Persons from './Persons'
 import Filter from './Filter'
 import PersonForm from './PersonForm'
 
-const App = () => {
+const App = () => 
+{
   const [persons, setPersons] = useState([]) 
   const [ newName, setNewName ] = useState('')
   const [ newPhoneNumber, setNewPhoneNumber ] = useState ('')
@@ -21,7 +22,7 @@ const App = () => {
   const changeFilter = event => setFilter(event.target.value)
   const changeNameInput = event => setNewName(event.target.value)
   const changePhoneInput = event => setNewPhoneNumber(event.target.value)
-  
+
   const addNumber = (event) => {
     event.preventDefault()
     if (newName === '' || newPhoneNumber === '')
@@ -48,6 +49,26 @@ const App = () => {
                           )
     }            
   }
+
+  const handleDeleteButtonClick = person => 
+  {
+    const toDelete = window.confirm (`Delete ${person.name}?`)
+    if (toDelete)
+    {
+      const request = personService.deletePerson(person.id)
+      request.then(() => 
+                    { 
+                      setPersons(persons.filter(entry => person.id !== entry.id))
+                    })
+            .catch (error =>  
+                          {
+                              alert (`Connection error or no such person found! Error: ${error}`) 
+                          })
+
+    }
+  }
+  
+  
   return (
     <div>
       <h2>Phonebook</h2>
@@ -60,7 +81,10 @@ const App = () => {
                   changePhoneInput = {changePhoneInput}
       />
       <h3> Numbers </h3>
-        <Persons persons = {persons} filter = {filter} />
+        <Persons persons = {persons}
+                 filter = {filter} 
+                 handleDeleteButtonClick = {handleDeleteButtonClick}
+        />
     </div>
   )
 }

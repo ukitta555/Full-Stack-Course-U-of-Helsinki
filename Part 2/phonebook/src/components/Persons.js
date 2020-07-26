@@ -1,7 +1,8 @@
 import React from "react"
 import Person from "./Person"
 
-const Persons = ({persons, filter}) => 
+
+const Persons = ({persons, filter, handleDeleteButtonClick}) => 
 {
   return (
     <ul>
@@ -13,7 +14,8 @@ const Persons = ({persons, filter}) =>
             .map(
                 (person) => 
                 <Person key = {person.id} 
-                        person = {person} 
+                        person = {person}
+                        handleDeleteButtonClick = {handleDeleteButtonClick} 
                 /> 
               )
     }
