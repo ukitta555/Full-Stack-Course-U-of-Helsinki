@@ -30,9 +30,32 @@ const App = () =>
       alert (`You haven't filled all the fields yet.`)
     } else if (persons.map
                 (person => person.name.toLocaleLowerCase())
-                .indexOf(newName) !== -1)
+                .indexOf(newName.toLocaleLowerCase()) !== -1)
     {
-      alert (`${newName} is already present in phonebook`)
+      const index = persons.map(person => 
+                                        person.name.toLocaleLowerCase())
+                          .indexOf(newName.toLocaleLowerCase())
+      console.log (index)
+      const newEntry = {
+        ...persons[index],
+        phone: newPhoneNumber
+      }
+      const toChange = window.confirm (`${newName} is already present in phonebook, replace the old number with the new one?`)
+      if (toChange)
+      {
+        personService.changePerson(persons[index].id, newEntry)
+                   .then(entry => {
+                                    setPersons(persons.map(person =>
+                                                              {
+                                                                return (person.id !== entry.id 
+                                                                        ? person 
+                                                                        : entry)
+                                                              }
+                                                          )
+                                              )
+                                  }
+                          )
+      }
     } else 
     {
       const newEntry = {
