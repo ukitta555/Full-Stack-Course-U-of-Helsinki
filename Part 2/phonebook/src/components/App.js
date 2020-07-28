@@ -3,6 +3,8 @@ import personService from '../services/personsBackend'
 import Persons from './Persons'
 import Filter from './Filter'
 import PersonForm from './PersonForm'
+import Notification from './Notification'
+import "../index.css"
 
 const App = () => 
 {
@@ -10,7 +12,8 @@ const App = () =>
   const [ newName, setNewName ] = useState('')
   const [ newPhoneNumber, setNewPhoneNumber ] = useState ('')
   const [ filter, setFilter ] = useState ('')
-
+  const [ notificationMessage, setNotificationMessage ] = useState (null)
+  const [ errorMessage, setErrorMessage ] = useState (null)
   useEffect( () => 
                   { 
                     personService
@@ -22,6 +25,16 @@ const App = () =>
   const changeFilter = event => setFilter(event.target.value)
   const changeNameInput = event => setNewName(event.target.value)
   const changePhoneInput = event => setNewPhoneNumber(event.target.value)
+  const showMessage = (message) => 
+                                {
+                                  setNotificationMessage (message)
+                                  setTimeout(() => setNotificationMessage(null), 5000)
+                                }
+  const showError = (error) =>
+                              {
+                                setErrorMessage (error)
+                                setTimeout(() => setErrorMessage (null), 5000)
+                              }
 
   const addNumber = (event) => {
     event.preventDefault()
@@ -44,7 +57,8 @@ const App = () =>
       if (toChange)
       {
         personService.changePerson(persons[index].id, newEntry)
-                   .then(entry => {
+                    .then(entry => 
+                                  {
                                     setPersons(persons.map(person =>
                                                               {
                                                                 return (person.id !== entry.id 
@@ -53,8 +67,9 @@ const App = () =>
                                                               }
                                                           )
                                               )
+                                    showMessage(`Changed ${persons[index].name}'s phone to ${newEntry.phone}`)
                                   }
-                          )
+                          )              
       }
     } else 
     {
@@ -68,6 +83,7 @@ const App = () =>
                                         setPersons (persons.concat(entry))
                                         setNewName('')
                                         setNewPhoneNumber('')
+                                        showMessage (`Added ${newEntry.name} to the phonebook`)
                                       }
                           )
     }            
@@ -95,6 +111,8 @@ const App = () =>
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message = {notificationMessage} styleType = "success" />
+      <Notification message = {errorMessage} styleType = "error" />
       <Filter filter = {filter} changeFilter = {changeFilter} />
       <h3>add a new person: </h3>
       <PersonForm addNumber = {addNumber}
