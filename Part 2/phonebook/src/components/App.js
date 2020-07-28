@@ -41,7 +41,7 @@ const App = () =>
     if (newName === '' || newPhoneNumber === '')
     {
       alert (`You haven't filled all the fields yet.`)
-    } else if (persons.map
+    } else if (persons.map  // bug, need to fecth data before searching. We will probably fix it in next parts of the course!
                 (person => person.name.toLocaleLowerCase())
                 .indexOf(newName.toLocaleLowerCase()) !== -1)
     {
@@ -69,7 +69,19 @@ const App = () =>
                                               )
                                     showMessage(`Changed ${persons[index].name}'s phone to ${newEntry.phone}`)
                                   }
-                          )              
+                          )
+                    .catch (error => 
+                                    {
+                                       //console.log(error)
+                                       showError (`Information of ${persons[index].id} has already been removed from server`)
+                                       setPersons (persons.filter(person => 
+                                                                          {
+                                                                            return person.id !== persons[index].id
+                                                                          }
+                                                                 )
+                                                  )
+                                    }
+                           )             
       }
     } else 
     {
@@ -89,21 +101,27 @@ const App = () =>
     }            
   }
 
-  const handleDeleteButtonClick = person => 
+  const handleDeleteButtonClick = personToDelete => 
   {
-    const toDelete = window.confirm (`Delete ${person.name}?`)
+    const toDelete = window.confirm (`Delete ${personToDelete.name}?`)
     if (toDelete)
     {
-      const request = personService.deletePerson(person.id)
+      const request = personService.deletePerson(personToDelete.id)
       request.then(() => 
                     { 
-                      setPersons(persons.filter(entry => person.id !== entry.id))
+                      setPersons(persons.filter(entry => personToDelete.id !== entry.id))
+                      showMessage(`${personToDelete.name} has been removed from the phonebook`)
                     })
             .catch (error =>  
                           {
-                              alert (`Connection error or no such person found! Error: ${error}`) 
+                              showError (`This person has already been deleted from phonebook`)
+                              setPersons (persons.filter(person => 
+                                                                {
+                                                                  return person.id !== personToDelete.id
+                                                                }
+                                                        )
+                                         )
                           })
-
     }
   }
   
