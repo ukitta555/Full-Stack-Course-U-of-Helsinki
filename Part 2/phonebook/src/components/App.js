@@ -72,14 +72,17 @@ const App = () =>
                           )
                     .catch (error => 
                                     {
-                                       //console.log(error)
-                                       showError (`Information of ${persons[index].id} has already been removed from server`)
-                                       setPersons (persons.filter(person => 
+                                      if (error.response.data)  showError(error.response.data.error)
+                                      else 
+                                      {
+                                        showError (`Information of ${persons[index].id} has already been removed from server`)
+                                        setPersons (persons.filter(person => 
                                                                           {
                                                                             return person.id !== persons[index].id
                                                                           }
                                                                  )
                                                   )
+                                      }
                                     }
                            )             
       }
@@ -98,6 +101,7 @@ const App = () =>
                                         showMessage (`Added ${newEntry.name} to the phonebook`)
                                       }
                           )
+                    .catch(error => showError(error.response.data.error))
     }            
   }
 
