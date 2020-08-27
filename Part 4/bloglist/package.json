@@ -7,7 +7,7 @@
     "test": "echo \"No tests specified\" && exit 1",
     "dev": "nodemon index.js",
     "lint": "eslint .",
-    "lint:fix" : "eslint . --fix"
+    "lint:fix": "eslint . --fix"
   },
   "author": "Nekriach Vladyslav",
   "license": "MIT",
@@ -19,6 +19,7 @@
   },
   "devDependencies": {
     "eslint": "^7.7.0",
+    "morgan": "^1.10.0",
     "nodemon": "^2.0.4"
   }
 }
