@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"No tests specified\" && exit 1",
+    "test": "jest --verbose",
     "dev": "nodemon index.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
@@ -19,7 +19,11 @@
   },
   "devDependencies": {
     "eslint": "^7.7.0",
+    "jest": "^26.4.2",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.4"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }

@@ -17,6 +17,7 @@ const unknownEndpoint = (request, response) => {
 const errorHandler = (error, request, response, next) => {
   logger.info('error!')
   response.status(404).send ({ error: 'error! You are in an error handler function.' })
+  next(error)
 }
 
 module.exports = { unknownEndpoint, errorHandler, requestLogger }
