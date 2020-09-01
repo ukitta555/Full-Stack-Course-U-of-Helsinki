@@ -1,3 +1,5 @@
+const _ = require('lodash')
+
 const dummy = (blogs) => {
   return 1
 }
@@ -25,8 +27,26 @@ const favouriteBlog = (blogs) => {
   ]
 }
 
+// implement mostBlogs
+// https://stackoverflow.com/questions/37251765/lodash-count-values-from-array-of-objects
+// https://lodash.com/docs/4.17.15
+const mostBlogs = (blogs) => {
+  if (blogs.length === 0) return null
+  const authorBlogMap = _.countBy(blogs, 'author')
+  const authorOfMostBlogs =_.maxBy(Object.keys(authorBlogMap), (author) => {
+    return authorBlogMap[author]
+  })
+  return (
+    {
+      author: authorOfMostBlogs,
+      blogs: authorBlogMap[authorOfMostBlogs]
+    }
+  )
+}
+
 module.exports = {
   dummy,
   totalLikes,
-  favouriteBlog
+  favouriteBlog,
+  mostBlogs
 }
