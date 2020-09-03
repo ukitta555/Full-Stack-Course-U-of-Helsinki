@@ -28,7 +28,6 @@ const favouriteBlog = (blogs) => {
 }
 
 // implement mostBlogs
-// https://stackoverflow.com/questions/37251765/lodash-count-values-from-array-of-objects
 // https://lodash.com/docs/4.17.15
 const mostBlogs = (blogs) => {
   if (blogs.length === 0) return null
@@ -44,9 +43,29 @@ const mostBlogs = (blogs) => {
   )
 }
 
+const mostLikes = (blogs) => {
+  if (blogs.length === 0) return null
+  const authorLikesMap = {}
+  blogs.forEach(blog => authorLikesMap[blog.author] =
+    (!isNaN(authorLikesMap[blog.author]))
+      ? authorLikesMap[blog.author] + blog.likes
+      : blog.likes
+  )
+  const authorWithMostLikes = _.maxBy(Object.keys(authorLikesMap), (author) => {
+    return authorLikesMap[author]
+  })
+  return (
+    {
+      author: authorWithMostLikes,
+      likes: authorLikesMap[authorWithMostLikes]
+    }
+  )
+}
+
 module.exports = {
   dummy,
   totalLikes,
   favouriteBlog,
-  mostBlogs
+  mostBlogs,
+  mostLikes
 }

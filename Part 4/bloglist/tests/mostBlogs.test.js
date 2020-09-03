@@ -25,7 +25,7 @@ describe('most blogs', () => {
     }
     expect(mostBlogs(blogs)).toEqual(expectedResult)
   })
-  
+
   test('with 3 blogs (2+1)', () => {
     const blogs =
     [
