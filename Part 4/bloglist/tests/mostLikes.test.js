@@ -1,5 +1,3 @@
-const { result } = require('lodash')
-
 const mostLikes = require ('../utils/list_helper').mostLikes
 
 describe('most likes', () => {
