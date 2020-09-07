@@ -23,6 +23,7 @@ test('GET request returns data in json', async () => {
     .expect('Content-Type', /application\/json/)
   expect(blogsInDB.body).toHaveLength(helper.initialBlogs.length)
 })
+
 test('a specific blog is within the reaturned blogs', async() => {
   const response = await api.get('/api/blogs')
 
@@ -30,6 +31,11 @@ test('a specific blog is within the reaturned blogs', async() => {
 
   const titles = response.body.map(blog => blog.title)
   expect(titles).toContain(expectedTitle)
+})
+
+test('blog object has property \'id\' instead of \'_id\'', async () => {
+  const response = await api.get('/api/blogs')
+  expect(response.body[0].id).toBeDefined()
 })
 
 afterAll(() => {
