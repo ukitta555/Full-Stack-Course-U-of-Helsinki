@@ -38,6 +38,32 @@ test('blog object has property \'id\' instead of \'_id\'', async () => {
   expect(response.body[0].id).toBeDefined()
 })
 
+test('POST request adds the new blog to the DB', async () => {
+  const newBlog = {
+    author: '123',
+    title: '234',
+    likes: 123,
+    url: 'qwe'
+  }
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const blogsAfterInsert = await helper.blogsInDB()
+
+  expect (blogsAfterInsert).toHaveLength(helper.initialBlogs.length + 1)
+
+  const blogsContent = blogsAfterInsert.map( blog => {return {
+    author: blog.author,
+    title: blog.title,
+    url: blog.url,
+    likes: blog.likes
+  }})
+  expect (blogsContent).toContainEqual(newBlog)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
