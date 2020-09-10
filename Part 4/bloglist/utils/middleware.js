@@ -16,7 +16,6 @@ const unknownEndpoint = (request, response) => {
 
 const errorHandler = (error, request, response, next) => {
   if (error.name === 'ValidationError') {
-    logger.info('fuck!')
     return response.status(400).end()
   }
   response.status(404).send ({ error: 'error! You are in an error handler function.' })

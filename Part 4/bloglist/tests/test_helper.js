@@ -33,7 +33,6 @@ const nonExistingId = () => {
 
 const blogsInDB = async () => {
   const blogs = Blog.find({})
-  //return blogs.map(blog => JSON.stringify(blog))
   return blogs
 }
 
