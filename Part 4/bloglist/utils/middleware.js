@@ -18,7 +18,11 @@ const errorHandler = (error, request, response, next) => {
   if (error.name === 'ValidationError') {
     return response.status(400).end()
   }
-  response.status(404).send ({ error: 'error! You are in an error handler function.' })
+  if (error.name === 'CastError')
+  {
+    return response.status(400).send({ error: `CastError: ${error.message}` })
+  }
+  response.status(404).send ({ error: `error: ${error.message}` })
   next(error)
 }
 

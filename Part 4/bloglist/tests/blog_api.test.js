@@ -28,7 +28,7 @@ describe ('GET request tests', () => {
   test('a specific blog is within the returned blogs', async() => {
     const response = await api.get('/api/blogs')
 
-    const expectedTitle = helper.initialBlogs[1]
+    const expectedTitle = helper.initialBlogs[1].title
 
     const titles = response.body.map(blog => blog.title)
     expect(titles).toContain(expectedTitle)
@@ -111,7 +111,7 @@ describe ('DELETE request tests', () => {
       .expect(204)
   })
 
-  test ('DELETE actually deletes a note', async () => {
+  test ('DELETE actually deletes a blog', async () => {
     const blogsBeforeDeletion = await helper.blogsInDB()
 
     const blogToDelete = blogsBeforeDeletion.find(blog => {
@@ -121,7 +121,7 @@ describe ('DELETE request tests', () => {
     await api
       .delete(`/api/blogs/${blogToDelete._id}`)
       .expect(204)
-    
+
     const blogsAfterDeletion = await helper.blogsInDB()
 
     const titlesAfterDeletion = blogsAfterDeletion.map(blog => {
@@ -130,6 +130,59 @@ describe ('DELETE request tests', () => {
 
     expect (titlesAfterDeletion).not.toContain(helper.initialBlogs[1].title)
   })
+
+  test('blog id is invalid => response code 400', async () => {
+    const invalidID = 'sdjflaksdf3424123'
+
+    await api
+      .delete(`/api/blogs/${invalidID}`)
+      .expect(400)
+  })
+
+  //TODO invalid + nonexistant id check
+})
+
+describe ('PUT request tests', () => {
+  test ('PUT request returns response code 204', async () => {
+    const blogsBeforeUpdate = await helper.blogsInDB()
+
+    const blogToUpdate = blogsBeforeUpdate[0]
+    const updatedBlog = {
+      ...helper.initialBlogs[0],
+      title: 'My life'
+    }
+
+    await api
+      .put(`/api/blogs/${blogToUpdate._id}`)
+      .send(updatedBlog)
+      .expect(204)
+  })
+
+  test ('PUT request updates the blog', async () => {
+    const blogsBeforeUpdate = await helper.blogsInDB()
+
+    const blogToUpdate = blogsBeforeUpdate[0]
+
+    const updatedBlog = {
+      ...helper.initialBlogs[0],
+      title: 'My life'
+    }
+
+    await api
+      .put(`/api/blogs/${blogToUpdate._id}`)
+      .send(updatedBlog)
+      .expect(204)
+
+    const blogsAfterUpdate =  await helper
+      .blogsInDB()
+
+    const titlesAfterUpdate = blogsAfterUpdate.map (blog => blog.title)
+
+    expect(titlesAfterUpdate).toContain('My life')
+    expect(titlesAfterUpdate).toHaveLength(helper.initialBlogs.length)
+  })
+  //TODO invalid id check + valid but nonexisting id check
+  test ('PUT request with wrong id return 400', () => {})
 })
 
 afterAll(() => {
