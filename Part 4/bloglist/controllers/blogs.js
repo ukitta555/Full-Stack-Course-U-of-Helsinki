@@ -1,5 +1,6 @@
 const blogsRouter = require('express').Router()
 const Blog = require ('../models/blog')
+const logger = require('../utils/logger')
 
 blogsRouter.get('/', async (request, response) => {
   const allBlogs = await Blog.find({})
@@ -29,7 +30,13 @@ blogsRouter.put('/:id', async (request, response) => {
   const updatedBlogWithID = await Blog
     .findByIdAndUpdate(request.params.id, updatedBlog, { new: true })
 
-  response.status(204).json(updatedBlogWithID)
+  if (updatedBlogWithID) {
+    response.status(204).json(updatedBlogWithID)
+  }
+  else
+  {
+    response.status(404).end()
+  }
 })
 
 module.exports = blogsRouter

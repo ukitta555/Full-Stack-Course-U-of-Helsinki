@@ -21,7 +21,7 @@ const initialBlogs = [
   }
 ]
 
-const nonExistingId = () => {
+const nonexistingId = () => {
   const blog = new Blog ({
     title: 'toremove',
     author: 'JEST',
@@ -36,4 +36,4 @@ const blogsInDB = async () => {
   return blogs
 }
 
-module.exports = { initialBlogs, nonExistingId, blogsInDB }
+module.exports = { initialBlogs, nonexistingId, blogsInDB }

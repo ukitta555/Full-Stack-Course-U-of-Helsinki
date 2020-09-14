@@ -139,7 +139,6 @@ describe ('DELETE request tests', () => {
       .expect(400)
   })
 
-  //TODO invalid + nonexistant id check
 })
 
 describe ('PUT request tests', () => {
@@ -182,7 +181,21 @@ describe ('PUT request tests', () => {
     expect(titlesAfterUpdate).toHaveLength(helper.initialBlogs.length)
   })
   //TODO invalid id check + valid but nonexisting id check
-  test ('PUT request with wrong id return 400', () => {})
+  test ('PUT request with invalid id returns 400', async () => {
+    const invalidID  = 'dfkasdjfhkajsdhf'
+
+    await api
+      .put(`/api/blogs/${invalidID}`)
+      .expect(400)
+  })
+
+  test ('PUT request with nonexistant id returns 404', async () => {
+    const nonexistantID = helper.nonexistingId()
+
+    await api
+      .put(`/api/blogs/${nonexistantID}`)
+      .expect(404)
+  })
 })
 
 afterAll(() => {
