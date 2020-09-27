@@ -1,7 +1,9 @@
 const mongoose = require ('mongoose')
 const supertest = require ('supertest')
+const bcrypt = require ('bcrypt')
 const app = require ('../app')
 const Blog = require ('../models/blog')
+const User = require('../models/user')
 const helper = require ('./test_helper')
 const api = supertest(app)
 
@@ -107,7 +109,7 @@ describe ('DELETE request tests', () => {
     const blogToDelete = blogsBeforeDeletion[0]
 
     await api
-      .delete(`/api/blogs/${blogToDelete._id}`)
+      .delete(`/api/blogs/${blogToDelete.id}`)
       .expect(204)
   })
 
@@ -119,7 +121,7 @@ describe ('DELETE request tests', () => {
     })
 
     await api
-      .delete(`/api/blogs/${blogToDelete._id}`)
+      .delete(`/api/blogs/${blogToDelete.id}`)
       .expect(204)
 
     const blogsAfterDeletion = await helper.blogsInDB()
@@ -152,7 +154,7 @@ describe ('PUT request tests', () => {
     }
 
     await api
-      .put(`/api/blogs/${blogToUpdate._id}`)
+      .put(`/api/blogs/${blogToUpdate.id}`)
       .send(updatedBlog)
       .expect(204)
   })
@@ -168,7 +170,7 @@ describe ('PUT request tests', () => {
     }
 
     await api
-      .put(`/api/blogs/${blogToUpdate._id}`)
+      .put(`/api/blogs/${blogToUpdate.id}`)
       .send(updatedBlog)
       .expect(204)
 
@@ -195,6 +197,39 @@ describe ('PUT request tests', () => {
     await api
       .put(`/api/blogs/${nonexistantID}`)
       .expect(404)
+  })
+})
+
+describe ('user creation', () => {
+  beforeEach(async () => {
+    await User.deleteMany({})
+
+    const passwordHash = await bcrypt.hash('secret', 10)
+    const user = new User ({ username:'root', name: 'test', passwordHash })
+
+    await user.save()
+  })
+
+  test ('creation succeeds with a new username', async () => {
+    const usersAtStart = await helper.usersInDB()
+
+    const newUser = {
+      username: 'mluuk',
+      password: 'salainen',
+      name: 'matti'
+    }
+
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAtEnd = await helper.usersInDB()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length + 1)
+
+    const usernames = usersAtEnd.map (user => user.username)
+    expect(usernames).toContain(newUser.username)
   })
 })
 

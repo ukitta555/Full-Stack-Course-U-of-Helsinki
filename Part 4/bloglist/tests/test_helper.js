@@ -1,4 +1,5 @@
 const Blog = require ('../models/blog')
+const User = require ('../models/user')
 const initialBlogs = [
   {
     title: '10 reasons why you should get a job',
@@ -32,8 +33,18 @@ const nonexistingId = () => {
 }
 
 const blogsInDB = async () => {
-  const blogs = Blog.find({})
-  return blogs
+  const blogs = await Blog.find({})
+  return blogs.map (blog => blog.toJSON())
 }
 
-module.exports = { initialBlogs, nonexistingId, blogsInDB }
+const usersInDB = async () => {
+  const users = await User.find({})
+  return users.map (user => user.toJSON())
+}
+
+module.exports = {
+  initialBlogs,
+  nonexistingId,
+  blogsInDB,
+  usersInDB
+}
