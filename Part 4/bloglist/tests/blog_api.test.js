@@ -337,6 +337,27 @@ describe ('user creation', () => {
     const usersAtEnd = await helper.usersInDB()
     expect(usersAtEnd).toHaveLength(usersAtStart.length)
   })
+
+  /*
+  test ('creating a blog results in a cross-reference between a blog and a user', async () => {
+    const newBlog = {
+      title: 'test blog',
+      author: 'me',
+      url: 'local',
+      likes: 10
+    }
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAtEnd = await helper.usersInDB()
+    const blogsAtEnd = await helper.blogsInDB()
+
+    expect (usersAtEnd)
+  })
+  */
 })
 
 afterAll(() => {
