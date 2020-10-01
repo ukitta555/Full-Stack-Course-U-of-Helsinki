@@ -1,5 +1,6 @@
 const Blog = require ('../models/blog')
 const User = require ('../models/user')
+const bcrypt = require ('bcrypt')
 const initialBlogs = [
   {
     title: '10 reasons why you should get a job',
@@ -21,6 +22,15 @@ const initialBlogs = [
     likes: 2
   }
 ]
+
+const initialUserPassword = 'secret'
+const passwordHash = () => {return bcrypt.hashSync (initialUserPassword, 10)}
+const initialUser = {
+  username: 'root',
+  password: passwordHash(),
+  name: 'test'
+}
+
 
 const nonexistingId = () => {
   const blog = new Blog ({
@@ -44,6 +54,8 @@ const usersInDB = async () => {
 
 module.exports = {
   initialBlogs,
+  initialUser,
+  initialUserPassword,
   nonexistingId,
   blogsInDB,
   usersInDB

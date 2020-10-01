@@ -1,6 +1,6 @@
 const mongoose = require ('mongoose')
 const supertest = require ('supertest')
-const bcrypt = require ('bcrypt')
+//const bcrypt = require ('bcrypt')
 const app = require ('../app')
 const Blog = require ('../models/blog')
 const User = require('../models/user')
@@ -48,7 +48,8 @@ describe ('POST request tests', () => {
       author: '123',
       title: '234',
       likes: 123,
-      url: 'qwe'
+      url: 'qwe',
+
     }
     await api
       .post('/api/blogs')
@@ -203,11 +204,8 @@ describe ('PUT request tests', () => {
 describe ('user creation', () => {
   beforeEach(async () => {
     await User.deleteMany({})
-
-    const passwordHash = await bcrypt.hash('secret', 10)
-    const user = new User ({ username:'root', name: 'test', password: passwordHash })
-
-    await user.save()
+    const newUser = new User(helper.initialUser)
+    await newUser.save()
   })
 
   test ('creation succeeds with a new username', async () => {
@@ -234,7 +232,6 @@ describe ('user creation', () => {
 
   test ('creation with username that is already in DB fails', async () => {
     const usersAtStart = await helper.usersInDB()
-
     const newUser = {
       username: usersAtStart[0].username,
       password: 'xasdfad',
@@ -360,6 +357,26 @@ describe ('user creation', () => {
   */
 })
 
+describe ('login tests', () => {
+  beforeEach ( async () => {
+    await User.deleteMany({})
+    const newUser = new User(helper.initialUser)
+    await newUser.save()
+  })
+
+  test ('logging in with correct log/pass returns a JWT', async () => {
+    const newUser = {
+      username: helper.initialUser.username,
+      password: helper.initialUserPassword
+    }
+    const result = await api
+      .post('/api/login')
+      .send(newUser)
+      .expect(200)
+
+    expect(result.body).toHaveProperty('token')
+  })
+})
 afterAll(() => {
   mongoose.connection.close()
 })
