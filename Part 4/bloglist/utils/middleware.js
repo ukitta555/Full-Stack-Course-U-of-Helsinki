@@ -20,7 +20,10 @@ const errorHandler = (error, request, response, next) => {
   }
   if (error.name === 'CastError')
   {
-    return response.status(400).send({ error: `CastError: ${error.message}` })
+    return response.status(400).json({ error: `CastError: ${error.message}` })
+  } else if (error.name === 'JsonWebTokenError')
+  {
+    return response.status(401).json({ error: 'invalid token' })
   }
   response.status(404).send ({ error: `error: ${error.message}` })
   next(error)
