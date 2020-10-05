@@ -8,6 +8,7 @@ blogsRouter.get('/', async (request, response) => {
   response.status(200).json(allBlogs)
 })
 
+/*
 const getTokenFrom = request => {
   const authorization = request.get ('authorization')
   if (authorization && authorization.toLowerCase().startsWith('bearer '))
@@ -16,7 +17,7 @@ const getTokenFrom = request => {
   }
   return null
 }
-
+*/
 
 blogsRouter.post('/', async (request, response) => {
   if (typeof request.body.likes === 'undefined')
@@ -26,10 +27,9 @@ blogsRouter.post('/', async (request, response) => {
 
   const body = request.body
 
-  const token = getTokenFrom(request)
-  const user = jwt.verify (token, process.env.SECRET)
+  const user = jwt.verify (request.token, process.env.SECRET)
 
-  if (!token || !user)
+  if (!request.token || !user)
   {
     return response.status(401).json({ error: 'No JWT token/token is invalid' })
   }
