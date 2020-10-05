@@ -50,6 +50,30 @@ blogsRouter.post('/', async (request, response) => {
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
+  const decodedToken = jwt.verify (request.token, process.env.SECRET)
+  const user = await User.findOne({ username: decodedToken.username })
+
+  const blogToDelete = user.blogs.filter( blog => {
+    return (blog.toString() === request.params.id.toString())
+  })
+
+  // if there is no user, the token is invalid or the user didn't create this blog
+  if (!user || !decodedToken || blogToDelete.length === 0)
+  {
+    return response.status(401).json({ error: 'invalid token / wrong user' })
+  }
+
+  const blogsForUpdatedUser = user.blogs.filter( blog => {
+    return !(blog.toString() === request.params.id.toString())
+  })
+
+
+  const updatedUser = {
+    ...user._doc,
+    blogs: blogsForUpdatedUser
+  }
+
+  await User.findByIdAndUpdate(decodedToken.id, updatedUser)
   await Blog.findByIdAndRemove(request.params.id)
   response.status(204).end()
 })

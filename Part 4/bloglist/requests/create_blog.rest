@@ -1,9 +1,9 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InZsYWQiLCJpZCI6IjVmNzczM2UwYjQzZjk2MjI4NDQzNDIxZiIsImlhdCI6MTYwMTY0NzYzMX0.mYTXcQODb34hlVkG9wGKco_v1zJgJ2TdLTTs9iMJh8M
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InZsYWQiLCJpZCI6IjVmNzczM2UwYjQzZjk2MjI4NDQzNDIxZiIsImlhdCI6MTYwMTk4MTY4N30.PU22qHgddO9aKr1iQLZmXxnmVA8MfThUdzozQKYJDDc
 
 {
-  "title": "refactoring using middleware",
+  "title": "06.10",
   "author": "me",
   "url": "localhost",
   "likes": 10
