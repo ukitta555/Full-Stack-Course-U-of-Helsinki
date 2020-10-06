@@ -8,16 +8,6 @@ blogsRouter.get('/', async (request, response) => {
   response.status(200).json(allBlogs)
 })
 
-/*
-const getTokenFrom = request => {
-  const authorization = request.get ('authorization')
-  if (authorization && authorization.toLowerCase().startsWith('bearer '))
-  {
-    return authorization.substring(7)
-  }
-  return null
-}
-*/
 
 blogsRouter.post('/', async (request, response) => {
   if (typeof request.body.likes === 'undefined')

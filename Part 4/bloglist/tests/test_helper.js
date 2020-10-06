@@ -52,6 +52,7 @@ const usersInDB = async () => {
   return users.map (user => user.toJSON())
 }
 
+
 module.exports = {
   initialBlogs,
   initialUser,

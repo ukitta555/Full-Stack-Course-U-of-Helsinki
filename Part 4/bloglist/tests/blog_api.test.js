@@ -1,6 +1,7 @@
 const mongoose = require ('mongoose')
 const supertest = require ('supertest')
 //const bcrypt = require ('bcrypt')
+// const jwt = require ('jsonwebtoken')
 const app = require ('../app')
 const Blog = require ('../models/blog')
 const User = require('../models/user')
@@ -8,6 +9,17 @@ const helper = require ('./test_helper')
 const api = supertest(app)
 
 
+const login = async () => {
+  const response = await api
+    .post('/api/login')
+    .send({
+      ...helper.initialUser,
+      password: helper.initialUserPassword
+    })
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+  return response.body
+}
 
 beforeEach(async () => {
   await Blog.deleteMany({})
@@ -16,6 +28,10 @@ beforeEach(async () => {
     let blogObject = new Blog(blog)
     await blogObject.save()
   }
+
+  await User.deleteMany({})
+  const newUser = new User(helper.initialUser)
+  await newUser.save()
 })
 
 describe ('GET request tests', () => {
@@ -44,15 +60,17 @@ describe ('GET request tests', () => {
 
 describe ('POST request tests', () => {
   test('POST request adds the new blog to the DB', async () => {
+    const response = await login()
+
     const newBlog = {
       author: '123',
       title: '234',
       likes: 123,
       url: 'qwe',
-
     }
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${response.token}`)
       .send(newBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
@@ -71,6 +89,8 @@ describe ('POST request tests', () => {
   })
 
   test('if likes property is missing, it defaults to 0', async () => {
+    const response = await login()
+
     const newBlog = {
       author: 'test',
       title: 'test article',
@@ -78,8 +98,10 @@ describe ('POST request tests', () => {
     }
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${response.token}`)
       .send(newBlog)
       .expect(201)
+      .expect('Content-Type', /application\/json/)
 
     const blogsInDB = await helper.blogsInDB()
 
@@ -92,14 +114,43 @@ describe ('POST request tests', () => {
   })
 
   test('if title/url is missing, return status code 400', async () => {
+    const response = await login()
+
     const badBlog = {
       author: 'test',
       likes: 100
     }
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${response.token}`)
       .send(badBlog)
       .expect(400)
+  })
+
+  test ('if JWT token isn\'t provided, status code 401 is returned', async () => {
+    const newBlog = {
+      author: '123',
+      title: '234',
+      likes: 123,
+      url: 'qwe',
+    }
+
+    await api
+      .post('/api/blogs')
+      .set('Authorization', 'Bearer  ')
+      .send(newBlog)
+      .expect(401)
+
+    await api
+      .post('/api/blogs')
+      .set('Authorization', '')
+      .send(newBlog)
+      .expect(401)
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(401)
   })
 })
 
@@ -202,11 +253,6 @@ describe ('PUT request tests', () => {
 })
 
 describe ('user creation', () => {
-  beforeEach(async () => {
-    await User.deleteMany({})
-    const newUser = new User(helper.initialUser)
-    await newUser.save()
-  })
 
   test ('creation succeeds with a new username', async () => {
     const usersAtStart = await helper.usersInDB()
@@ -358,11 +404,6 @@ describe ('user creation', () => {
 })
 
 describe ('login tests', () => {
-  beforeEach ( async () => {
-    await User.deleteMany({})
-    const newUser = new User(helper.initialUser)
-    await newUser.save()
-  })
 
   test ('logging in with correct log/pass returns a JWT', async () => {
     const newUser = {
