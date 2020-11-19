@@ -10,6 +10,16 @@ const App = () => {
   const [user, setUser] = useState(null)
 
   useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem
+      (
+        'loggedBlogappUser'
+      )
+    if (loggedUserJSON)
+    {
+      setUser(JSON.parse(loggedUserJSON))
+    }
+  }, [])
+  useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
     )
@@ -26,6 +36,8 @@ const App = () => {
 
   const blogsComponent = <Blogs
       blogs = {blogs}
+      user = {user}
+      setUser = {setUser}
   />
 
   return (

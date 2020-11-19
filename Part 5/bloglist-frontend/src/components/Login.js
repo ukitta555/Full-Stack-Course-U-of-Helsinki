@@ -14,6 +14,11 @@ const Login = ({username, setUsername, password, setPassword, user, setUser}) =>
 
       if (userData)
       {
+        window.localStorage.setItem
+          (
+            'loggedBlogappUser',
+            JSON.stringify(userData)
+          )
         setUser(userData)
         setPassword('')
         setUsername('')
