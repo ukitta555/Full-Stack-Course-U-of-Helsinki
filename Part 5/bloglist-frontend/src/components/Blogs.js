@@ -1,12 +1,21 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import Blog from './Blog'
+import blogService from '../services/blogs'
 
-
-const Blogs = ({blogs, user, setUser}) => {
+const Blogs = ({user, setUser}) => {
+  const [blogs, setBlogs] = useState([])
   const logOut = () => {
     setUser(null)
+    blogService.setToken(null)
     window.localStorage.removeItem('loggedBlogappUser')
   }
+
+  useEffect(() => {
+    blogService.getAll().then(blogs =>
+      setBlogs( blogs )
+    )
+  }, [])
+
   return (
     <div>
       <h2>blogs</h2>

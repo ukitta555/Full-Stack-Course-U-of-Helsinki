@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import Blogs from './components/Blogs'
-import blogService from './services/blogs'
 import Login from './components/Login'
+import NewBlogForm from './components/NewBlogForm'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -19,27 +18,26 @@ const App = () => {
       setUser(JSON.parse(loggedUserJSON))
     }
   }, [])
-  useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )
-  }, [])
 
   const loginCopmonent = <Login
       username = {username}
       password = {password}
-      user = {user}
       setUsername = {setUsername}
       setPassword = {setPassword}
       setUser = {setUser}
     />
 
-  const blogsComponent = <Blogs
-      blogs = {blogs}
-      user = {user}
-      setUser = {setUser}
-  />
-
+  const blogsComponent = (
+    <div>
+      <Blogs
+        user = {user}
+        setUser = {setUser}
+      />
+      <NewBlogForm
+        user = {user}
+      />
+    </div>
+  )
   return (
     <div>
       {

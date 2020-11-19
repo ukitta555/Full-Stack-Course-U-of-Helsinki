@@ -2,8 +2,9 @@ import React from 'react'
 import LoginUsername from "./LoginUsername"
 import LoginPassword from "./LoginPassword"
 import loginService from "../services/login"
+import blogService from "../services/blogs"
 
-const Login = ({username, setUsername, password, setPassword, user, setUser}) => {
+const Login = ({username, setUsername, password, setPassword, setUser}) => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -22,6 +23,7 @@ const Login = ({username, setUsername, password, setPassword, user, setUser}) =>
         setUser(userData)
         setPassword('')
         setUsername('')
+        blogService.setToken(userData.token)
         console.log(`logging in with ${username} ${password}`)
       }
     } catch (exception)
