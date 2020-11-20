@@ -18,6 +18,9 @@ const NewBlogForm = ({setIsGood, updateNotification, blogs, setBlogs}) => {
       setBlogs(blogs.concat(blogFromDB))
       setIsGood(true)
       updateNotification(`a new blog ${blogFromDB.title} by ${blogFromDB.author} added`)
+      setTitle('')
+      setURL('')
+      setAuthor('')
     }
     catch (exception) {
       setIsGood(false)
