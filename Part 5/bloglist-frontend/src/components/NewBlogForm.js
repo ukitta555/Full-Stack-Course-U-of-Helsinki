@@ -5,7 +5,6 @@ const NewBlogForm = ({setIsGood, updateNotification, blogs, setBlogs}) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [URL, setURL] = useState('')
-
   const addBlog = async (event) => {
     event.preventDefault()
     try {

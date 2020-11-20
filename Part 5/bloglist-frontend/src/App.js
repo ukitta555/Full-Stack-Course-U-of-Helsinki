@@ -3,6 +3,7 @@ import Blogs from './components/Blogs'
 import Login from './components/Login'
 import NewBlogForm from './components/NewBlogForm'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 
 const App = () => {
@@ -17,6 +18,7 @@ const App = () => {
     setNotification(text)
     setTimeout(() => setNotification(null), 5000)
   }
+
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem
       (
@@ -30,15 +32,17 @@ const App = () => {
     }
   }, [])
 
-  const loginCopmonent = <Login
-      username = {username}
-      password = {password}
-      setUsername = {setUsername}
-      setPassword = {setPassword}
-      setUser = {setUser}
-      setIsGood = {setIsGood}
-      updateNotification = {updateNotification}
-    />
+  const loginCopmonent = (
+      <Login
+        username = {username}
+        password = {password}
+        setUsername = {setUsername}
+        setPassword = {setPassword}
+        setUser = {setUser}
+        setIsGood = {setIsGood}
+        updateNotification = {updateNotification}
+      />
+    )
 
   const blogsComponent = (
     <div>
@@ -48,12 +52,14 @@ const App = () => {
         blogs = {blogs}
         setBlogs = {setBlogs}
       />
-      <NewBlogForm
-        setIsGood = {setIsGood}
-        updateNotification = {updateNotification}
-        blogs = {blogs}
-        setBlogs = {setBlogs}
-      />
+      <Togglable buttonText = 'add new note!'>
+        <NewBlogForm
+          setIsGood = {setIsGood}
+          updateNotification = {updateNotification}
+          blogs = {blogs}
+          setBlogs = {setBlogs}
+        />
+      </Togglable>
     </div>
   )
 
