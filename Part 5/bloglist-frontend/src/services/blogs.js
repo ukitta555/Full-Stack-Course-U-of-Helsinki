@@ -5,7 +5,12 @@ let token = null
 
 const setToken = (newToken) =>
 {
-  token = `bearer ${newToken}`
+  if (newToken === null) {
+    token = null
+  }
+  else {
+    token = `bearer ${newToken}`
+  }
 }
 
 const getAll = () => {

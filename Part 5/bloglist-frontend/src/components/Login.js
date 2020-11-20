@@ -4,7 +4,13 @@ import LoginPassword from "./LoginPassword"
 import loginService from "../services/login"
 import blogService from "../services/blogs"
 
-const Login = ({username, setUsername, password, setPassword, setUser}) => {
+const Login = ({
+  username, setUsername,
+  password, setPassword,
+  setUser,
+  setIsGood,
+  updateNotification
+  }) => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -28,6 +34,8 @@ const Login = ({username, setUsername, password, setPassword, setUser}) => {
       }
     } catch (exception)
     {
+      setIsGood(false)
+      updateNotification('Failed to login! Wrong username or password')
       console.log (`Wrong credentials ${exception}`)
     }
 
@@ -45,18 +53,20 @@ const Login = ({username, setUsername, password, setPassword, setUser}) => {
   }
   return (<form onSubmit = {handleLogin}>
     <h2>log in to the blog application</h2>
+    <div>
     username
     <LoginUsername
       username = {username}
       handleUsernameChange = {handleUsernameChange}
     />
-    <br></br>
+    </div>
+    <div>
     password
     <LoginPassword
       password = {password}
       handlePasswordChange = {handlePasswordChange}
     />
-    <br></br>
+    </div>
     <button type = "submit"> push </button>
   </form>)
 }

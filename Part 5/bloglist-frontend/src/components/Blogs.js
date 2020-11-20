@@ -1,9 +1,8 @@
-import React, {useState, useEffect} from 'react'
+import React, {useEffect} from 'react'
 import Blog from './Blog'
 import blogService from '../services/blogs'
 
-const Blogs = ({user, setUser}) => {
-  const [blogs, setBlogs] = useState([])
+const Blogs = ({user, setUser, blogs, setBlogs}) => {
   const logOut = () => {
     setUser(null)
     blogService.setToken(null)
@@ -12,7 +11,7 @@ const Blogs = ({user, setUser}) => {
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs( blogs )
+      setBlogs(blogs)
     )
   }, [])
 
