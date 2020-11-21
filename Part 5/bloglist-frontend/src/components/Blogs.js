@@ -24,7 +24,7 @@ const Blogs = ({user, setUser, blogs, setBlogs}) => {
       setBlogs(sortBlogsByLikes(blogsFromDB))
     }
     fetchData()
-  }, [setBlogs])
+  }, [])
 
   return (
     <div>

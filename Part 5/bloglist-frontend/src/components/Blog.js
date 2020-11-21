@@ -15,11 +15,11 @@ const Blog = ({ blog, blogs, setBlogs, sortBlogsByLikes }) => {
 
   const toggleInforamtion = () => {
     setIsInformationHidden(!isInformationHidden)
-    console.log(isInformationHidden)
   }
 
   const handleLikeClick =  async (blogToUpdate) => {
     const updatedBlog = await blogService.updateBlog(blogToUpdate)
+    console.log(updatedBlog)
     updateBlogs(updatedBlog)
     blog = updatedBlog
   }
