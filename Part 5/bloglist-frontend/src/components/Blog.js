@@ -1,5 +1,8 @@
 import React, {useState} from 'react'
-const Blog = ({ blog }) => {
+import blogService from '../services/blogs'
+import cloneDeep from 'lodash/cloneDeep'
+
+const Blog = ({ blog, blogs, setBlogs }) => {
   const [isInformationHidden, setIsInformationHidden] = useState (true)
 
   const blogStyle = {
@@ -10,14 +13,27 @@ const Blog = ({ blog }) => {
     marginBottom: 5
   }
 
-
   const toggleInforamtion = () => {
     setIsInformationHidden(!isInformationHidden)
     console.log(isInformationHidden)
   }
 
-  const handleLikeClick= () => {
-    console.log("someone likes the blog!")
+  const handleLikeClick =  async (blogToUpdate) => {
+    const updatedBlog = await blogService.updateBlog(blogToUpdate)
+    updateBlogs(updatedBlog)
+    blog = updatedBlog
+  }
+
+  const updateBlogs = (updatedBlog) => {
+    const index = blogs.findIndex(
+      blog =>
+      {
+        return blog.id.toString() === updatedBlog.id.toString()
+      }
+    )
+    const blogsCopy = cloneDeep(blogs)
+    blogsCopy[index] = updatedBlog
+    setBlogs(blogsCopy)
   }
 
   const Info = (
@@ -27,7 +43,7 @@ const Blog = ({ blog }) => {
       </p>
       <p>
         Likes: {blog.likes}
-        <button onClick = {handleLikeClick}> like </button>
+        <button onClick = {() => handleLikeClick(blog)}> like </button>
       </p>
       <p>
         Created by: {blog.user.name}

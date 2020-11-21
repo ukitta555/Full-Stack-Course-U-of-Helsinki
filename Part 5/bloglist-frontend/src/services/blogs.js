@@ -13,9 +13,38 @@ const setToken = (newToken) =>
   }
 }
 
-const getAll = () => {
-  const request = axios.get(baseUrl)
-  return request.then(response => response.data)
+const getAll = async () => {
+  const response = await axios.get(baseUrl)
+  return response.data
+}
+
+const updateBlog = async (blogToUpdate) => {
+  try
+  {
+    const newBlog =
+    {
+      title: blogToUpdate.title,
+      author: blogToUpdate.author,
+      url: blogToUpdate.url,
+      likes: blogToUpdate.likes + 1,
+      user: blogToUpdate.user.id
+    }
+  const response = await axios.put(
+    `${baseUrl}/${blogToUpdate.id}`
+    , newBlog
+    , {
+        headers:
+        {
+          'content-type': 'application/json'
+        }
+      }
+    )
+  return response.data
+  }
+  catch (exception)
+  {
+    console.log(exception.response.data.error)
+  }
 }
 
 const createBlog = async (newBlog) => {
@@ -25,4 +54,4 @@ const createBlog = async (newBlog) => {
   const response =  await axios.post(baseUrl, newBlog, config)
   return response.data
 }
-export default { getAll, createBlog, setToken }
+export default { getAll, createBlog, updateBlog, setToken }

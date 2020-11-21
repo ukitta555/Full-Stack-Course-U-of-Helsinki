@@ -3,17 +3,22 @@ import Blog from './Blog'
 import blogService from '../services/blogs'
 
 const Blogs = ({user, setUser, blogs, setBlogs}) => {
-  const logOut = () => {
+  const logOut = () =>
+  {
     setUser(null)
     blogService.setToken(null)
     window.localStorage.removeItem('loggedBlogappUser')
   }
 
-  useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs(blogs)
-    )
-  }, [])
+  useEffect(() =>
+  {
+    const fetchData = async () =>
+    {
+      const blogsFromDB = await blogService.getAll()
+      setBlogs(blogsFromDB)
+    }
+    fetchData()
+  }, [setBlogs])
 
   return (
     <div>
@@ -26,7 +31,12 @@ const Blogs = ({user, setUser, blogs, setBlogs}) => {
       <h2>blogs</h2>
       {
         blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} />
+          <Blog
+          key={blog.id}
+          blog={blog}
+          blogs = {blogs}
+          setBlogs = {setBlogs}
+           />
         )
       }
     </div>
