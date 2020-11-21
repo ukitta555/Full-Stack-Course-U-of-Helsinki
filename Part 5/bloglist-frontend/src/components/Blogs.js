@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react'
 import Blog from './Blog'
 import blogService from '../services/blogs'
+import cloneDeep from 'lodash/cloneDeep'
 
 const Blogs = ({user, setUser, blogs, setBlogs}) => {
   const logOut = () =>
@@ -10,12 +11,17 @@ const Blogs = ({user, setUser, blogs, setBlogs}) => {
     window.localStorage.removeItem('loggedBlogappUser')
   }
 
+  const sortBlogsByLikes = (blogs) => {
+    const blogsCopy = cloneDeep(blogs)
+    return blogsCopy.sort((a, b) => - a.likes + b.likes)
+  }
+
   useEffect(() =>
   {
     const fetchData = async () =>
     {
       const blogsFromDB = await blogService.getAll()
-      setBlogs(blogsFromDB)
+      setBlogs(sortBlogsByLikes(blogsFromDB))
     }
     fetchData()
   }, [setBlogs])
@@ -36,6 +42,7 @@ const Blogs = ({user, setUser, blogs, setBlogs}) => {
           blog={blog}
           blogs = {blogs}
           setBlogs = {setBlogs}
+          sortBlogsByLikes = {sortBlogsByLikes}
            />
         )
       }

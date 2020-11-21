@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import blogService from '../services/blogs'
 import cloneDeep from 'lodash/cloneDeep'
 
-const Blog = ({ blog, blogs, setBlogs }) => {
+const Blog = ({ blog, blogs, setBlogs, sortBlogsByLikes }) => {
   const [isInformationHidden, setIsInformationHidden] = useState (true)
 
   const blogStyle = {
@@ -33,7 +33,7 @@ const Blog = ({ blog, blogs, setBlogs }) => {
     )
     const blogsCopy = cloneDeep(blogs)
     blogsCopy[index] = updatedBlog
-    setBlogs(blogsCopy)
+    setBlogs(sortBlogsByLikes(blogsCopy))
   }
 
   const Info = (
