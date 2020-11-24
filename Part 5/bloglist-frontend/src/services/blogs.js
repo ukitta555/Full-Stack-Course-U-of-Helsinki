@@ -44,6 +44,7 @@ const updateBlog = async (blogToUpdate) => {
   catch (exception)
   {
     console.log(exception.response.data.error)
+
   }
 }
 
@@ -54,4 +55,19 @@ const createBlog = async (newBlog) => {
   const response =  await axios.post(baseUrl, newBlog, config)
   return response.data
 }
-export default { getAll, createBlog, updateBlog, setToken }
+
+const deleteBlog = async (blogToRemove) => {
+  try {
+    const config = { headers: {Authorization: token}}
+    await axios.delete (
+      `${baseUrl}/${blogToRemove.id}`,
+      config
+    )
+  }
+  catch (exception) {
+    console.log(exception.response.data.error)
+    throw exception.response.data.error
+  }
+
+}
+export default { getAll, createBlog, updateBlog, setToken, deleteBlog}

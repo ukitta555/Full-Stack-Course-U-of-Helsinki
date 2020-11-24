@@ -57,6 +57,7 @@ const App = () => {
       <Togglable buttonText = 'add new note!'>
         <NewBlogForm
           setIsGood = {setIsGood}
+          user = {user}
           updateNotification = {updateNotification}
           blogs = {blogs}
           setBlogs = {setBlogs}
