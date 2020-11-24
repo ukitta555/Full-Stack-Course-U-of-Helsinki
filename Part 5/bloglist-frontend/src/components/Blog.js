@@ -1,8 +1,9 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import blogService from '../services/blogs'
 import cloneDeep from 'lodash/cloneDeep'
 
-const Blog = ({ blog, blogs, setBlogs, sortBlogsByLikes, user }) => {
+const Blog = ({ blog, blogs, setBlogs, sortBlogsByLikes, user }) =>
+{
   const [isInformationHidden, setIsInformationHidden] = useState (true)
 
   const blogStyle = {
@@ -13,35 +14,41 @@ const Blog = ({ blog, blogs, setBlogs, sortBlogsByLikes, user }) => {
     marginBottom: 5
   }
 
-  const toggleInforamtion = () => {
+  const toggleInforamtion = () =>
+  {
     setIsInformationHidden(!isInformationHidden)
   }
 
-  const handleRemoveClick = async (blogToRemove) => {
-    try {
-        if (window.confirm(`Do you really want to delete '${blogToRemove.title}'?`))
-        {
-          await blogService.deleteBlog(blogToRemove)
-          const index = blogs.findIndex(
-            blog => blogToRemove.id.toString() === blog.id.toString()
-          )
-          const blogsCopy = cloneDeep(blogs)
-          blogsCopy.splice(index, 1)
-          setBlogs(blogsCopy)
-        }
+  const handleRemoveClick = async (blogToRemove) =>
+  {
+    try
+    {
+      if (window.confirm(`Do you really want to delete '${blogToRemove.title}'?`))
+      {
+        await blogService.deleteBlog(blogToRemove)
+        const index = blogs.findIndex(
+          blog => blogToRemove.id.toString() === blog.id.toString()
+        )
+        const blogsCopy = cloneDeep(blogs)
+        blogsCopy.splice(index, 1)
+        setBlogs(blogsCopy)
+      }
     }
-    catch (exception) {
+    catch (exception)
+    {
       console.log(exception)
     }
   }
 
-  const handleLikeClick =  async (blogToUpdate) => {
+  const handleLikeClick =  async (blogToUpdate) =>
+  {
     const updatedBlog = await blogService.updateBlog(blogToUpdate)
     updateBlogs(updatedBlog)
     blog = updatedBlog
   }
 
-  const updateBlogs = (updatedBlog) => {
+  const updateBlogs = (updatedBlog) =>
+  {
     const index = blogs.findIndex(
       blog =>
       {
@@ -54,8 +61,8 @@ const Blog = ({ blog, blogs, setBlogs, sortBlogsByLikes, user }) => {
   }
 
   const removeButtonDisplay = (blog.user.name === user.name)
-    ? {display : ''}
-    : {display : 'none'}
+    ? { display : '' }
+    : { display : 'none' }
 
 
   const Info = (
@@ -81,15 +88,15 @@ const Blog = ({ blog, blogs, setBlogs, sortBlogsByLikes, user }) => {
 
 
   return (
-  <div style = {blogStyle}>
-    {blog.title} {blog.author}
-    <button onClick = {toggleInforamtion}> view </button>
-    <div>
-    {
-      isInformationHidden ? '' : Info
-    }
+    <div style = {blogStyle}>
+      {blog.title} {blog.author}
+      <button onClick = {toggleInforamtion}> view </button>
+      <div>
+        {
+          isInformationHidden ? '' : Info
+        }
+      </div>
     </div>
-  </div>
   )
 }
 

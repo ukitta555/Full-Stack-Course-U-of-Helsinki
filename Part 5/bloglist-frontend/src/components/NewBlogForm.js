@@ -1,6 +1,7 @@
 import React from 'react'
 
-const NewBlogForm = ({newBlog, setNewBlog, addBlog}) => {
+const NewBlogForm = ({ newBlog, setNewBlog, addBlog }) =>
+{
 
 
   return (
@@ -10,11 +11,11 @@ const NewBlogForm = ({newBlog, setNewBlog, addBlog}) => {
         <input
           type = 'text'
           value = {newBlog.title}
-          onChange = {({target}) => setNewBlog(
-          {
-            ...newBlog,
-            title: target.value
-          }
+          onChange = {({ target }) => setNewBlog(
+            {
+              ...newBlog,
+              title: target.value
+            }
           )}
         >
         </input>
@@ -24,12 +25,12 @@ const NewBlogForm = ({newBlog, setNewBlog, addBlog}) => {
         <input
           type = 'text'
           value = {newBlog.author}
-          onChange = {({target}) => setNewBlog(
+          onChange = {({ target }) => setNewBlog(
             {
               ...newBlog,
               author: target.value
             }
-            )}
+          )}
         >
         </input>
       </div>
@@ -38,12 +39,12 @@ const NewBlogForm = ({newBlog, setNewBlog, addBlog}) => {
         <input
           type = 'text'
           value = {newBlog.url}
-          onChange = {({target}) => setNewBlog(
+          onChange = {({ target }) => setNewBlog(
             {
               ...newBlog,
               url: target.value
             }
-            )}
+          )}
         >
         </input>
       </div>

@@ -6,7 +6,8 @@ import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 
-const App = () => {
+const App = () =>
+{
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -20,9 +21,11 @@ const App = () => {
     url: ''
   })
 
-  const addBlog = async (event) => {
+  const addBlog = async (event) =>
+  {
     event.preventDefault()
-    try {
+    try
+    {
       console.log(newBlog)
       const blogFromDB = await blogService.createBlog(newBlog)
       const blogWithUsername = {
@@ -44,22 +47,24 @@ const App = () => {
       )
       newBlogFormRef.current.toggleVisibility()
     }
-    catch (exception) {
+    catch (exception)
+    {
       setIsGood(false)
       updateNotification(exception.message)
     }
   }
 
-  const updateNotification = (text) => {
+  const updateNotification = (text) =>
+  {
     setNotification(text)
     setTimeout(() => setNotification(null), 5000)
   }
 
-  useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem
-      (
-        'loggedBlogappUser'
-      )
+  useEffect(() =>
+  {
+    const loggedUserJSON = window.localStorage.getItem(
+      'loggedBlogappUser'
+    )
     if (loggedUserJSON)
     {
       const user = JSON.parse(loggedUserJSON)
@@ -71,18 +76,18 @@ const App = () => {
 
 
   const loginCopmonent = (
-      <Login
-        username = {username}
-        password = {password}
-        setUsername = {setUsername}
-        setPassword = {setPassword}
-        setUser = {setUser}
-        setIsGood = {setIsGood}
-        updateNotification = {updateNotification}
-      />
-    )
+    <Login
+      username = {username}
+      password = {password}
+      setUsername = {setUsername}
+      setPassword = {setPassword}
+      setUser = {setUser}
+      setIsGood = {setIsGood}
+      updateNotification = {updateNotification}
+    />
+  )
 
-  const newBlogFormRef = useRef();
+  const newBlogFormRef = useRef()
 
   const blogsComponent = (
     <div>
@@ -104,7 +109,6 @@ const App = () => {
 
 
   return (
-
     <div>
       <Notification
         notification = {notification}
@@ -112,8 +116,8 @@ const App = () => {
       />
       {
         user
-        ? blogsComponent
-        : loginCopmonent
+          ? blogsComponent
+          : loginCopmonent
       }
     </div>
   )

@@ -5,20 +5,24 @@ let token = null
 
 const setToken = (newToken) =>
 {
-  if (newToken === null) {
+  if (newToken === null)
+  {
     token = null
   }
-  else {
+  else
+  {
     token = `bearer ${newToken}`
   }
 }
 
-const getAll = async () => {
+const getAll = async () =>
+{
   const response = await axios.get(baseUrl)
   return response.data
 }
 
-const updateBlog = async (blogToUpdate) => {
+const updateBlog = async (blogToUpdate) =>
+{
   try
   {
     const newBlog =
@@ -29,17 +33,17 @@ const updateBlog = async (blogToUpdate) => {
       likes: blogToUpdate.likes + 1,
       user: blogToUpdate.user.id
     }
-  const response = await axios.put(
-    `${baseUrl}/${blogToUpdate.id}`
-    , newBlog
-    , {
+    const response = await axios.put(
+      `${baseUrl}/${blogToUpdate.id}`
+      , newBlog
+      , {
         headers:
         {
           'content-type': 'application/json'
         }
       }
     )
-  return response.data
+    return response.data
   }
   catch (exception)
   {
@@ -48,26 +52,30 @@ const updateBlog = async (blogToUpdate) => {
   }
 }
 
-const createBlog = async (newBlog) => {
+const createBlog = async (newBlog) =>
+{
   const config = {
-    headers: {Authorization: token}
+    headers: { Authorization: token }
   }
   const response =  await axios.post(baseUrl, newBlog, config)
   return response.data
 }
 
-const deleteBlog = async (blogToRemove) => {
-  try {
-    const config = { headers: {Authorization: token}}
+const deleteBlog = async (blogToRemove) =>
+{
+  try
+  {
+    const config = { headers: { Authorization: token } }
     await axios.delete (
       `${baseUrl}/${blogToRemove.id}`,
       config
     )
   }
-  catch (exception) {
+  catch (exception)
+  {
     console.log(exception.response.data.error)
     throw exception.response.data.error
   }
 
 }
-export default { getAll, createBlog, updateBlog, setToken, deleteBlog}
+export default { getAll, createBlog, updateBlog, setToken, deleteBlog }
