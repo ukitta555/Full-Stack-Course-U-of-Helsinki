@@ -53,12 +53,11 @@ const Blog = ({ blog, blogs, setBlogs, sortBlogsByLikes, user }) => {
     setBlogs(sortBlogsByLikes(blogsCopy))
   }
 
-  console.log(blog.user.name, user.name, blog.user.name === user.name)
   const removeButtonDisplay = (blog.user.name === user.name)
     ? {display : ''}
     : {display : 'none'}
 
-  console.log(removeButtonDisplay)
+
   const Info = (
     <div>
       <p>

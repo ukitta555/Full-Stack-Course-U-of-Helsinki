@@ -1,47 +1,21 @@
-import React, {useState} from 'react'
-import blogService from '../services/blogs'
+import React from 'react'
 
-const NewBlogForm = ({setIsGood, updateNotification, blogs, setBlogs, user}) => {
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [URL, setURL] = useState('')
-  const addBlog = async (event) => {
-    event.preventDefault()
-    try {
-      const newBlog = {
-        title: title,
-        author: author,
-        url: URL,
-        likes: 0,
-      }
-      console.log(newBlog)
-      const blogFromDB = await blogService.createBlog(newBlog)
-      const blogWithUsername = {
-        ...blogFromDB,
-        user: {
-          name: user.name
-        }
-      }
-      setBlogs(blogs.concat(blogWithUsername))
-      setIsGood(true)
-      updateNotification(`a new blog ${blogFromDB.title} by ${blogFromDB.author} added`)
-      setTitle('')
-      setURL('')
-      setAuthor('')
-    }
-    catch (exception) {
-      setIsGood(false)
-      updateNotification(exception.message)
-    }
-  }
+const NewBlogForm = ({newBlog, setNewBlog, addBlog}) => {
+
+
   return (
     <form onSubmit = {addBlog}>
       <div>
         title
         <input
           type = 'text'
-          value = {title}
-          onChange = {({target}) => setTitle(target.value)}
+          value = {newBlog.title}
+          onChange = {({target}) => setNewBlog(
+          {
+            ...newBlog,
+            title: target.value
+          }
+          )}
         >
         </input>
       </div>
@@ -49,8 +23,13 @@ const NewBlogForm = ({setIsGood, updateNotification, blogs, setBlogs, user}) => 
         author
         <input
           type = 'text'
-          value = {author}
-          onChange = {({target}) => setAuthor(target.value)}
+          value = {newBlog.author}
+          onChange = {({target}) => setNewBlog(
+            {
+              ...newBlog,
+              author: target.value
+            }
+            )}
         >
         </input>
       </div>
@@ -58,8 +37,13 @@ const NewBlogForm = ({setIsGood, updateNotification, blogs, setBlogs, user}) => 
         url
         <input
           type = 'text'
-          value = {URL}
-          onChange = {({target}) => setURL(target.value)}
+          value = {newBlog.url}
+          onChange = {({target}) => setNewBlog(
+            {
+              ...newBlog,
+              url: target.value
+            }
+            )}
         >
         </input>
       </div>

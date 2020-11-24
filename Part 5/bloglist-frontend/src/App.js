@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Blogs from './components/Blogs'
 import Login from './components/Login'
 import NewBlogForm from './components/NewBlogForm'
@@ -13,6 +13,42 @@ const App = () => {
   const [notification, setNotification] = useState(null)
   const [isGood, setIsGood] = useState(true)
   const [blogs, setBlogs] = useState([])
+  const [newBlog, setNewBlog] = useState({
+    author: '',
+    title: '',
+    likes: 0,
+    url: ''
+  })
+
+  const addBlog = async (event) => {
+    event.preventDefault()
+    try {
+      console.log(newBlog)
+      const blogFromDB = await blogService.createBlog(newBlog)
+      const blogWithUsername = {
+        ...blogFromDB,
+        user: {
+          name: user.name
+        }
+      }
+      setBlogs(blogs.concat(blogWithUsername))
+      setIsGood(true)
+      updateNotification(`a new blog ${blogFromDB.title} by ${blogFromDB.author} added`)
+      setNewBlog(
+        {
+          author: '',
+          title: '',
+          likes: 0,
+          url: ''
+        }
+      )
+      newBlogFormRef.current.toggleVisibility()
+    }
+    catch (exception) {
+      setIsGood(false)
+      updateNotification(exception.message)
+    }
+  }
 
   const updateNotification = (text) => {
     setNotification(text)
@@ -46,6 +82,8 @@ const App = () => {
       />
     )
 
+  const newBlogFormRef = useRef();
+
   const blogsComponent = (
     <div>
       <Blogs
@@ -54,13 +92,11 @@ const App = () => {
         blogs = {blogs}
         setBlogs = {setBlogs}
       />
-      <Togglable buttonText = 'add new note!'>
+      <Togglable buttonText = 'add new note!' ref = {newBlogFormRef}>
         <NewBlogForm
-          setIsGood = {setIsGood}
-          user = {user}
-          updateNotification = {updateNotification}
-          blogs = {blogs}
-          setBlogs = {setBlogs}
+          newBlog = {newBlog}
+          setNewBlog = {setNewBlog}
+          addBlog = {addBlog}
         />
       </Togglable>
     </div>
