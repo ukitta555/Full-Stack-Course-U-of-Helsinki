@@ -18,6 +18,46 @@ const Blogs = ({ user, setUser, blogs, setBlogs }) =>
     return blogsCopy.sort((a, b) => - a.likes + b.likes)
   }
 
+  const handleRemoveClick = async (blogToRemove) =>
+  {
+    try
+    {
+      if (window.confirm(`Do you really want to delete '${blogToRemove.title}'?`))
+      {
+        await blogService.deleteBlog(blogToRemove)
+        const index = blogs.findIndex(
+          blog => blogToRemove.id.toString() === blog.id.toString()
+        )
+        const blogsCopy = cloneDeep(blogs)
+        blogsCopy.splice(index, 1)
+        setBlogs(blogsCopy)
+      }
+    }
+    catch (exception)
+    {
+      console.log(exception)
+    }
+  }
+
+  const handleLikeClick =  async (blogToUpdate) =>
+  {
+    const updatedBlog = await blogService.updateBlog(blogToUpdate)
+    updateBlogs(updatedBlog)
+  }
+
+  const updateBlogs = (updatedBlog) =>
+  {
+    const index = blogs.findIndex(
+      blog =>
+      {
+        return blog.id.toString() === updatedBlog.id.toString()
+      }
+    )
+    const blogsCopy = cloneDeep(blogs)
+    blogsCopy[index] = updatedBlog
+    setBlogs(sortBlogsByLikes(blogsCopy))
+  }
+
   useEffect(() =>
   {
     const fetchData = async () =>
@@ -27,6 +67,7 @@ const Blogs = ({ user, setUser, blogs, setBlogs }) =>
     }
     fetchData()
   }, [setBlogs])
+
 
   return (
     <div>
@@ -42,9 +83,8 @@ const Blogs = ({ user, setUser, blogs, setBlogs }) =>
           <Blog
             key={blog.id}
             blog={blog}
-            blogs = {blogs}
-            setBlogs = {setBlogs}
-            sortBlogsByLikes = {sortBlogsByLikes}
+            handleRemoveClick = {handleRemoveClick}
+            handleLikeClick = {handleLikeClick}
             user = {user}
           />
         )

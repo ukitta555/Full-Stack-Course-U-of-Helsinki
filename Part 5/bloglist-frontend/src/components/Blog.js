@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
-import blogService from '../services/blogs'
-import cloneDeep from 'lodash/cloneDeep'
 
-const Blog = ({ blog, blogs, setBlogs, sortBlogsByLikes, user }) =>
+const Blog = ({ blog, handleLikeClick, handleRemoveClick, user }) =>
 {
   const [isInformationHidden, setIsInformationHidden] = useState (true)
 
@@ -20,46 +18,6 @@ const Blog = ({ blog, blogs, setBlogs, sortBlogsByLikes, user }) =>
     setIsInformationHidden(!isInformationHidden)
   }
 
-  const handleRemoveClick = async (blogToRemove) =>
-  {
-    try
-    {
-      if (window.confirm(`Do you really want to delete '${blogToRemove.title}'?`))
-      {
-        await blogService.deleteBlog(blogToRemove)
-        const index = blogs.findIndex(
-          blog => blogToRemove.id.toString() === blog.id.toString()
-        )
-        const blogsCopy = cloneDeep(blogs)
-        blogsCopy.splice(index, 1)
-        setBlogs(blogsCopy)
-      }
-    }
-    catch (exception)
-    {
-      console.log(exception)
-    }
-  }
-
-  const handleLikeClick =  async (blogToUpdate) =>
-  {
-    const updatedBlog = await blogService.updateBlog(blogToUpdate)
-    updateBlogs(updatedBlog)
-    blog = updatedBlog
-  }
-
-  const updateBlogs = (updatedBlog) =>
-  {
-    const index = blogs.findIndex(
-      blog =>
-      {
-        return blog.id.toString() === updatedBlog.id.toString()
-      }
-    )
-    const blogsCopy = cloneDeep(blogs)
-    blogsCopy[index] = updatedBlog
-    setBlogs(sortBlogsByLikes(blogsCopy))
-  }
 
   const removeButtonDisplay = (blog.user.name === user.name)
     ? { display : '' }
@@ -73,7 +31,12 @@ const Blog = ({ blog, blogs, setBlogs, sortBlogsByLikes, user }) =>
       </p>
       <p>
         Likes: {blog.likes}
-        <button onClick = {() => handleLikeClick(blog)}> like </button>
+        <button
+          onClick = {() => handleLikeClick(blog)}
+          className = 'likeButton'
+        >
+          like
+        </button>
       </p>
       <p>
         Created by: {blog.user.name}
@@ -91,7 +54,12 @@ const Blog = ({ blog, blogs, setBlogs, sortBlogsByLikes, user }) =>
   return (
     <div style = {blogStyle}  className = "blog">
       {blog.title} {blog.author}
-      <button onClick = {toggleInforamtion}> view </button>
+      <button
+        onClick = {toggleInforamtion}
+        className = 'viewButton'
+      >
+         view
+      </button>
       <div>
         {
           isInformationHidden ? '' : Info
