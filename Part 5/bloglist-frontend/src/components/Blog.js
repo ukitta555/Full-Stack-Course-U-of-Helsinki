@@ -6,7 +6,8 @@ const Blog = ({ blog, blogs, setBlogs, sortBlogsByLikes, user }) =>
 {
   const [isInformationHidden, setIsInformationHidden] = useState (true)
 
-  const blogStyle = {
+  const blogStyle =
+  {
     paddingTop: 10,
     paddingLeft: 2,
     border: 'solid',
@@ -88,7 +89,7 @@ const Blog = ({ blog, blogs, setBlogs, sortBlogsByLikes, user }) =>
 
 
   return (
-    <div style = {blogStyle}>
+    <div style = {blogStyle}  className = "blog">
       {blog.title} {blog.author}
       <button onClick = {toggleInforamtion}> view </button>
       <div>

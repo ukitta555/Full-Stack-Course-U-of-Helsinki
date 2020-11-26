@@ -97,7 +97,7 @@ const App = () =>
         blogs = {blogs}
         setBlogs = {setBlogs}
       />
-      <Togglable buttonText = 'add new note!' ref = {newBlogFormRef}>
+      <Togglable buttonText = 'add new blog!' ref = {newBlogFormRef}>
         <NewBlogForm
           newBlog = {newBlog}
           setNewBlog = {setNewBlog}
