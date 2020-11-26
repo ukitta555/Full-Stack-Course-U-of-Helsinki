@@ -1,14 +1,36 @@
-import React from 'react'
-
-const NewBlogForm = ({ newBlog, setNewBlog, addBlog }) =>
+import React, {useState} from 'react'
+import blogService from '../services/blogs'
+const NewBlogForm = ({ addBlog, setIsGood, updateNotifictaion }) =>
 {
+  const emptyBlog = {
+    author: '',
+    title: '',
+    likes: 0,
+    url: ''
+  }
+  const [newBlog, setNewBlog] = useState(emptyBlog)
 
+  const createBlog = async (event) =>
+  {
+    event.preventDefault()
+    try
+    {
 
+      addBlog(newBlog)
+      setNewBlog(emptyBlog)
+    }
+    catch (exception)
+    {
+      setIsGood(false)
+      updateNotifictaion(exception.message)
+    }
+  }
   return (
-    <form onSubmit = {addBlog}>
+    <form onSubmit = {createBlog} className = 'newBlogForm'>
       <div>
         title
         <input
+          id = 'title'
           type = 'text'
           value = {newBlog.title}
           onChange = {({ target }) => setNewBlog(
@@ -23,6 +45,7 @@ const NewBlogForm = ({ newBlog, setNewBlog, addBlog }) =>
       <div>
         author
         <input
+          id = 'author'
           type = 'text'
           value = {newBlog.author}
           onChange = {({ target }) => setNewBlog(
@@ -37,6 +60,7 @@ const NewBlogForm = ({ newBlog, setNewBlog, addBlog }) =>
       <div>
         url
         <input
+          id = 'url'
           type = 'text'
           value = {newBlog.url}
           onChange = {({ target }) => setNewBlog(
@@ -48,7 +72,7 @@ const NewBlogForm = ({ newBlog, setNewBlog, addBlog }) =>
         >
         </input>
       </div>
-      <button type = "submit"> Create new blog! </button>
+      <button type = 'submit'> Create new blog! </button>
     </form>
   )
 }

@@ -81,5 +81,6 @@ describe('blog component tests', () =>
     fireEvent.click(likeButton)
     expect(mockHandler.mock.calls).toHaveLength(2)
   })
+
 }
 )
