@@ -52,7 +52,7 @@ const Blog = ({ blog, handleLikeClick, handleRemoveClick, user }) =>
 
 
   return (
-    <div style = {blogStyle}  className = "blog">
+    <div style = {blogStyle} className = 'blog'>
       {blog.title} {blog.author}
       <button
         onClick = {toggleInforamtion}

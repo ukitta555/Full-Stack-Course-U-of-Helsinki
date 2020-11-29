@@ -50,4 +50,76 @@ describe('Blog app', function()
         .should('have.css', 'color', 'rgb(255, 0, 0)')
     })
   })
+
+  describe.only('When logged in', function()
+  {
+    beforeEach(function()
+    {
+      cy.request(
+        'POST',
+        'http://localhost:3001/api/login',
+        {
+          username: 'ukitta',
+          password: 'ukitta'
+        })
+        .then( response =>
+        {
+          localStorage.setItem(
+            'loggedBlogappUser',
+            JSON.stringify(response.body)
+          )
+          cy.visit('http://localhost:3000')
+        })
+    })
+
+    it('user can create new blog', function()
+    {
+      // click on the toggle button
+      cy.contains('add new blog!')
+        .click()
+
+      // fill in all inputs
+      cy.get('#author')
+        .type('test author')
+
+      cy.get('#url')
+        .type('testsite.com')
+
+      cy.get('#title')
+        .type('test title')
+
+      // add new blog
+      cy.get('#createNewBlogButton')
+        .click()
+
+
+
+      // click on the toggle button
+      cy.contains('add new blog!')
+        .click()
+
+      // fill in all inputs
+      cy.get('#author')
+        .type('test author1')
+
+      cy.get('#url')
+        .type('testsite.com1')
+
+      cy.get('#title')
+        .type('test title1')
+
+      // add new blog
+      cy.get('#createNewBlogButton')
+        .click()
+
+
+      cy.get('#blogs')
+        .contains('test author')
+        .contains('test title')
+
+      cy.get('#blogs')
+        .get('.blog')
+        .should('have.length', 2)
+    })
+  })
 })

@@ -71,7 +71,12 @@ const NewBlogForm = ({ addBlog, setIsGood, updateNotifictaion }) =>
         >
         </input>
       </div>
-      <button type = 'submit'> Create new blog! </button>
+      <button
+        id = 'createNewBlogButton'
+        type = 'submit'
+      >
+         Create new blog!
+      </button>
     </form>
   )
 }

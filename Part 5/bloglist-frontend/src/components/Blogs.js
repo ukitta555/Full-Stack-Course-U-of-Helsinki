@@ -70,7 +70,7 @@ const Blogs = ({ user, setUser, blogs, setBlogs }) =>
 
 
   return (
-    <div>
+    <div id = 'blogs'>
       <div>
         <p>
           {user.name} logged in
