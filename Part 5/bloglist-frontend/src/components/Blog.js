@@ -29,7 +29,7 @@ const Blog = ({ blog, handleLikeClick, handleRemoveClick, user }) =>
       <p>
         URL: {blog.url}
       </p>
-      <p>
+      <p className = 'blogLikes'>
         Likes: {blog.likes}
         <button
           onClick = {() => handleLikeClick(blog)}
@@ -44,6 +44,7 @@ const Blog = ({ blog, handleLikeClick, handleRemoveClick, user }) =>
       <button
         onClick = {() => handleRemoveClick(blog)}
         style = {removeButtonDisplay}
+        className = 'removeButton'
       >
         remove
       </button>

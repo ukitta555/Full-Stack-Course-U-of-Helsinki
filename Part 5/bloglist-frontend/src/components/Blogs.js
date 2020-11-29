@@ -74,7 +74,13 @@ const Blogs = ({ user, setUser, blogs, setBlogs }) =>
       <div>
         <p>
           {user.name} logged in
-          <button type="button" onClick = {logOut}> logout </button>
+          <button
+            type="button"
+            onClick = {logOut}
+            id = 'logoutButton'
+          >
+            logout
+          </button>
         </p>
       </div>
       <h2>blogs</h2>

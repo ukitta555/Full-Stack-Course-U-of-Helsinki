@@ -4,13 +4,11 @@ describe('Blog app', function()
   beforeEach(function()
   {
     cy.request('POST', 'http://localhost:3001/api/testing/reset')
-    const user =
-    {
+    cy.addUser({
       name: 'Vlad',
       username: 'ukitta',
       password: 'ukitta'
-    }
-    cy.request('POST', 'http://localhost:3001/api/users', user)
+    })
     cy.visit('http://localhost:3000')
   })
 
@@ -55,71 +53,127 @@ describe('Blog app', function()
   {
     beforeEach(function()
     {
-      cy.request(
-        'POST',
-        'http://localhost:3001/api/login',
-        {
-          username: 'ukitta',
-          password: 'ukitta'
-        })
-        .then( response =>
-        {
-          localStorage.setItem(
-            'loggedBlogappUser',
-            JSON.stringify(response.body)
-          )
-          cy.visit('http://localhost:3000')
-        })
+      cy.login({
+        username: 'ukitta',
+        password: 'ukitta'
+      })
     })
 
     it('user can create new blog', function()
     {
-      // click on the toggle button
-      cy.contains('add new blog!')
-        .click()
+      // create 1st blog
+      cy.createBlog({title: 'test title', author: 'test author', url: 'testsite.com'})
+      // say this one creates 2 blogs instead of 1
+      cy.createBlog({title: 'bugged', author: 'bugged', url: 'bugged.com'})
 
-      // fill in all inputs
-      cy.get('#author')
-        .type('test author')
-
-      cy.get('#url')
-        .type('testsite.com')
-
-      cy.get('#title')
-        .type('test title')
-
-      // add new blog
-      cy.get('#createNewBlogButton')
-        .click()
-
-
-
-      // click on the toggle button
-      cy.contains('add new blog!')
-        .click()
-
-      // fill in all inputs
-      cy.get('#author')
-        .type('test author1')
-
-      cy.get('#url')
-        .type('testsite.com1')
-
-      cy.get('#title')
-        .type('test title1')
-
-      // add new blog
-      cy.get('#createNewBlogButton')
-        .click()
-
-
+      // check whether 1st blog has rendered
       cy.get('#blogs')
         .contains('test author')
         .contains('test title')
+
+      // check whether 2nd blog  has rendered
+      cy.get('#blogs')
+        .contains('bugged')
+        .contains('bugged')
 
       cy.get('#blogs')
         .get('.blog')
         .should('have.length', 2)
     })
+
+    it('user can like the blog', function()
+    {
+      cy.createBlog({title: 'test title', author: 'test author', url: 'testsite.com'})
+      cy.get('.viewButton')
+        .click()
+
+      cy.get('.likeButton')
+        .click()
+
+      cy.get('.blog')
+        .contains('test title')
+        .contains('Likes: 1')
+    })
+
+    it('user can delete the created blog', function()
+    {
+      cy.createBlog({title: 'test title', author: 'test author', url: 'testsite.com'})
+
+      cy.get('.viewButton')
+        .click()
+
+      cy.get('.removeButton')
+        .click()
+
+      cy.get('html')
+        .should('not.contain', 'test title test author')
+    })
+
+    it('other users can\'t delete the created blog', function()
+    {
+      cy.createBlog({title: 'test title', author: 'test author', url: 'testsite.com'})
+
+      cy.get('#logoutButton')
+        .click()
+
+      cy.addUser({
+        name: 'other',
+        username: 'other',
+        password: 'other'
+      })
+
+      cy.login(
+        {
+          username: 'other',
+          password: 'other'
+        })
+
+      cy.get('.blog')
+        .get('.viewButton')
+        .click()
+
+      cy.get('removeButton')
+        .should('not.exist')
+    })
+
+    it.only('blogs are in sorted order (like-wise)', function() {
+      cy.createBlog({title: 'first', author: 'test author', url: 'testsite.com'})
+      cy.createBlog({title: 'second', author: 'test author', url: 'testsite.com'})
+      cy.createBlog({title: 'third', author: 'test author', url: 'testsite.com'})
+
+      cy.likeBlog('third test author')
+      cy.likeBlog('third test author')
+      cy.likeBlog('second test author')
+
+      cy.get('.blog')
+        .then (($blogs) =>
+        {
+          let maxLikes = 1000
+          cy.wrap($blogs)
+            .each(($blog) =>
+            {
+              cy.wrap($blog)
+                .children('.viewButton')
+                .click()
+
+
+              cy.wrap($blog)
+                .get('.blogLikes')
+                .then($likes =>
+                {
+                  const likesString = String($likes.text())
+                  const currentLikes = Number(likesString.charAt(7))
+                  expect(maxLikes).to.satisfy(num => num >= currentLikes)
+                  maxLikes = currentLikes
+                })
+
+
+              cy.wrap($blog)
+                .children('.viewButton')
+                .click()
+            })
+        })
+    })
+
   })
 })
