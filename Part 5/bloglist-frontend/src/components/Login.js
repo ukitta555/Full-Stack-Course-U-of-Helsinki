@@ -70,7 +70,7 @@ const Login = ({
         handlePasswordChange = {handlePasswordChange}
       />
     </div>
-    <button type = "submit"> push </button>
+    <button type = "submit"> login </button>
   </form>)
 }
 

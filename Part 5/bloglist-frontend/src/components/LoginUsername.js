@@ -4,6 +4,7 @@ const LoginUsername = ({ username, handleUsernameChange }) =>
 {
   return (<input
     type = 'text'
+    id = 'loginUsernameInput'
     value = {username}
     name = 'Username'
     onChange = {handleUsernameChange}

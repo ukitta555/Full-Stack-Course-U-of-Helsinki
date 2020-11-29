@@ -10,7 +10,9 @@
     "test:debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --runInBand",
     "dev": "cross-env NODE_ENV=development nodemon index.js",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "start:test": "cross-env NODE_ENV=test node index.js",
+    "start:test_console": "cross-env NODE_ENV=test_console node index.js"
   },
   "author": "Nekriach Vladyslav",
   "license": "MIT",
