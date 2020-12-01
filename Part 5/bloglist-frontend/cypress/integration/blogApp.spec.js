@@ -136,7 +136,8 @@ describe('Blog app', function()
         .should('not.exist')
     })
 
-    it.only('blogs are in sorted order (like-wise)', function() {
+    it.only('blogs are in sorted order (like-wise)', function()
+    {
       cy.createBlog({title: 'first', author: 'test author', url: 'testsite.com'})
       cy.createBlog({title: 'second', author: 'test author', url: 'testsite.com'})
       cy.createBlog({title: 'third', author: 'test author', url: 'testsite.com'})
