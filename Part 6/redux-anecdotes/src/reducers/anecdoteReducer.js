@@ -26,11 +26,20 @@ const castVote = (state, id) => {
       ...anecdoteToChange,
       votes: anecdoteToChange.votes + 1
     }
-  return state.map (anecdote => anecdote.id === id ? anecdoteToChange : anecdote)
+  return sortAnecdotesByVotes (
+    state.map (anecdote =>
+      anecdote.id === id
+      ? anecdoteToChange
+      : anecdote
+    ))
 }
 
 const addNewAnecdote = (state, content) => {
   return state.concat(asObject(content))
+}
+
+const sortAnecdotesByVotes = (state) => {
+  return state.sort ((lhs, rhs) => rhs.votes - lhs.votes)
 }
 export const voteAnecdote = (id) => {
   return {
@@ -46,6 +55,12 @@ export const addAnecdote = (content) => {
   }
 }
 
+export const sortAnecdotes = () => {
+  return {
+    type: 'SORT'
+  }
+}
+
 const initialState = anecdotesAtStart.map(asObject)
 
 const reducer = (state = initialState, action) => {
@@ -57,6 +72,8 @@ const reducer = (state = initialState, action) => {
       return castVote(state, action.data.id)
     case 'ADD':
       return addNewAnecdote(state, action.data.content)
+    case 'SORT':
+      return sortAnecdotesByVotes(state)
     default:
       return state
   }
