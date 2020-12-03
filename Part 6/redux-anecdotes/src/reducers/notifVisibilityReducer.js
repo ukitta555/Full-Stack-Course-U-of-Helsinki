@@ -9,8 +9,6 @@ export const hideNotification = () => {
 
 
 const notifVisibilityReducer = (state = initialState, action) => {
-  console.log('state: ', state)
-  console.log('action: ', action.type)
   switch(action.type) {
     case 'SHOW_NOTIFICATION':
       return true
