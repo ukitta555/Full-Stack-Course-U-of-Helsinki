@@ -15,7 +15,7 @@ const AnecdoteList = () => {
       return anecdote
         .content
         .toLowerCase()
-        .includes(state.filter)
+        .includes(state.filter.toLowerCase())
     })
     return filteredAnecdotes
   })
