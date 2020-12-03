@@ -26,21 +26,27 @@ const castVote = (state, id) => {
       ...anecdoteToChange,
       votes: anecdoteToChange.votes + 1
     }
-  return sortAnecdotesByVotes (
+  const sortedAnecdotes = sortAnecdotesByVotes (
     state.map (anecdote =>
       anecdote.id === id
       ? anecdoteToChange
       : anecdote
     ))
+  return sortedAnecdotes
 }
 
 const addNewAnecdote = (state, content) => {
-  return state.concat(asObject(content))
+  const updatedAnecdotes = state.concat(asObject(content))
+  return updatedAnecdotes
 }
 
-const sortAnecdotesByVotes = (state) => {
-  return state.sort ((lhs, rhs) => rhs.votes - lhs.votes)
+const sortAnecdotesByVotes = (anecdotes) => {
+  const sortedAnecdotes = anecdotes.sort ((lhs, rhs) => {
+    return rhs.votes - lhs.votes
+  })
+  return sortedAnecdotes
 }
+
 export const voteAnecdote = (id) => {
   return {
     type: 'VOTE',
@@ -55,15 +61,10 @@ export const addAnecdote = (content) => {
   }
 }
 
-export const sortAnecdotes = () => {
-  return {
-    type: 'SORT'
-  }
-}
 
-const initialState = anecdotesAtStart.map(asObject)
+const initialState =  anecdotesAtStart.map(asObject)
 
-const reducer = (state = initialState, action) => {
+const anecdoteReducer = (state = initialState, action) => {
   console.log('state now: ', state)
   console.log('action', action)
   switch (action.type)
@@ -72,11 +73,9 @@ const reducer = (state = initialState, action) => {
       return castVote(state, action.data.id)
     case 'ADD':
       return addNewAnecdote(state, action.data.content)
-    case 'SORT':
-      return sortAnecdotesByVotes(state)
     default:
       return state
   }
 }
 
-export default reducer
+export default anecdoteReducer
