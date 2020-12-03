@@ -1,17 +1,19 @@
 const initialState = 'Nothing happened yet...'
 
-export const changeNotification = (content) => {
+export const showNotification = (content) => {
   return {
-    type: 'CHANGE_NOTIFICATION',
+    type: 'SHOW_NOTIFICATION',
     newNotification: content
   }
 }
+
+
 
 const notificationReducer = (state = initialState, action) => {
   console.log('state now: ', state)
   console.log('action: ', action.type)
   switch (action.type) {
-    case 'CHANGE_NOTIFICATION':
+    case 'SHOW_NOTIFICATION':
       return action.newNotification
     default:
       return state
