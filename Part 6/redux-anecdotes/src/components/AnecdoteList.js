@@ -19,7 +19,7 @@ const AnecdoteList = () => {
     })
     return filteredAnecdotes
   })
-
+  console.log('This is an anecdote list', anecdotes)
   const dispatch = useDispatch()
 
   const vote = (id) =>
