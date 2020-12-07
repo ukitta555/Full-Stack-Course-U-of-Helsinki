@@ -1,6 +1,3 @@
-import anecdoteService from '../services/anecdotes'
-
-
 const castVote = (state, id) => {
   let anecdoteToChange = state.find (anecdote => {
     return anecdote.id === id
@@ -19,7 +16,7 @@ const castVote = (state, id) => {
   return sortedAnecdotes
 }
 
-const addNewAnecdote = (state, anecdote) => {
+const addNewAnecdote =  (state, anecdote) => {
   const updatedAnecdotes = state.concat(anecdote)
   return updatedAnecdotes
 }
@@ -41,7 +38,7 @@ export const voteAnecdote = (id) => {
 export const addAnecdote = (content) => {
   return {
     type: 'ADD',
-    data: {content}
+    data: content
   }
 }
 
