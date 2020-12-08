@@ -11,6 +11,8 @@ const castVote = (state, id) => {
       ...anecdoteToChange,
       votes: anecdoteToChange.votes + 1
     }
+
+
   const sortedAnecdotes = sortAnecdotesByVotes (
     state.map (anecdote =>
       anecdote.id === id
@@ -28,11 +30,24 @@ const addNewAnecdote =  (state, anecdote) => {
 
 // thunk function creators (used by the components)
 
+export const voteAnecdote = (anecdote) => {
+  return async dispatch => {
+    const newAnecdote =
+      {
+        ...anecdote,
+        votes: anecdote.votes + 1
+      }
+
+    await anecdoteService.update(newAnecdote)
+    dispatch(voteAnecdoteAction(newAnecdote.id))
+  }
+}
+
 export const fetchAnecdotes = () => {
   return async dispatch => {
     const anecdotes = await anecdoteService
       .getAll()
-    dispatch(initAnecdotes(anecdotes))
+    dispatch(initAnecdotesAction(anecdotes))
   }
 }
 
@@ -40,7 +55,7 @@ export const createAnecdote = (anecdote) => {
   return async dispatch => {
     const anecdoteInDb = await anecdoteService
       .createNew(anecdote)
-    dispatch(addAnecdote(anecdoteInDb))
+    dispatch(addAnecdoteAction(anecdoteInDb))
   }
 }
 
@@ -55,14 +70,14 @@ const sortAnecdotesByVotes = (anecdotes) => {
 
 // action creators
 
-export const voteAnecdote = (id) => {
+const voteAnecdoteAction = (id) => {
   return {
     type: 'VOTE',
     data: {id}
   }
 }
 
-const addAnecdote = (content) => {
+const addAnecdoteAction = (content) => {
   return {
     type: 'ADD',
     data: content
@@ -70,7 +85,7 @@ const addAnecdote = (content) => {
 }
 
 
-const initAnecdotes = (data) => {
+const initAnecdotesAction = (data) => {
   return {
     type: 'INIT',
     data: data
@@ -87,7 +102,7 @@ const anecdoteReducer = (state = initialState, action) => {
     case 'ADD':
       return addNewAnecdote(state, action.data)
     case 'INIT':
-      return action.data
+      return sortAnecdotesByVotes(action.data)
     default:
       return state
   }
