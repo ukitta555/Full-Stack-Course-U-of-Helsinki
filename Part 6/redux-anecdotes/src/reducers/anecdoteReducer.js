@@ -1,5 +1,7 @@
 import anecdoteService from '../services/anecdotes'
 
+// functionality
+
 const castVote = (state, id) => {
   let anecdoteToChange = state.find (anecdote => {
     return anecdote.id === id
@@ -23,6 +25,9 @@ const addNewAnecdote =  (state, anecdote) => {
   return updatedAnecdotes
 }
 
+
+// thunk function creators (used by the components)
+
 export const fetchAnecdotes = () => {
   return async dispatch => {
     const anecdotes = await anecdoteService
@@ -31,12 +36,24 @@ export const fetchAnecdotes = () => {
   }
 }
 
+export const createAnecdote = (anecdote) => {
+  return async dispatch => {
+    const anecdoteInDb = await anecdoteService
+      .createNew(anecdote)
+    dispatch(addAnecdote(anecdoteInDb))
+  }
+}
+
+
+// helpers
 const sortAnecdotesByVotes = (anecdotes) => {
   const sortedAnecdotes = anecdotes.sort ((lhs, rhs) => {
     return rhs.votes - lhs.votes
   })
   return sortedAnecdotes
 }
+
+// action creators
 
 export const voteAnecdote = (id) => {
   return {
@@ -45,7 +62,7 @@ export const voteAnecdote = (id) => {
   }
 }
 
-export const addAnecdote = (content) => {
+const addAnecdote = (content) => {
   return {
     type: 'ADD',
     data: content
@@ -53,7 +70,7 @@ export const addAnecdote = (content) => {
 }
 
 
-export const initAnecdotes = (data) => {
+const initAnecdotes = (data) => {
   return {
     type: 'INIT',
     data: data
