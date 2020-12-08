@@ -1,3 +1,5 @@
+import anecdoteService from '../services/anecdotes'
+
 const castVote = (state, id) => {
   let anecdoteToChange = state.find (anecdote => {
     return anecdote.id === id
@@ -19,6 +21,14 @@ const castVote = (state, id) => {
 const addNewAnecdote =  (state, anecdote) => {
   const updatedAnecdotes = state.concat(anecdote)
   return updatedAnecdotes
+}
+
+export const fetchAnecdotes = () => {
+  return async dispatch => {
+    const anecdotes = await anecdoteService
+      .getAll()
+    dispatch(initAnecdotes(anecdotes))
+  }
 }
 
 const sortAnecdotesByVotes = (anecdotes) => {
