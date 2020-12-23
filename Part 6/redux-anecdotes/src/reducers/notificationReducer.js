@@ -23,6 +23,7 @@ export const setNotification = (content, seconds) => {
     }, seconds * 1000)
 
     dispatch(setTimeoutID(timeoutID))
+
     console.log(timeoutID)
 
     state = getState()
