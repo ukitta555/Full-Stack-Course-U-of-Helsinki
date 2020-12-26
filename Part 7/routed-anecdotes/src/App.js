@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import {
   Switch, Route, Link,
-  useParams, useRouteMatch
+  useHistory, useRouteMatch
 } from 'react-router-dom'
 
 
@@ -69,7 +69,7 @@ const CreateNew = (props) => {
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
 
-
+  const history = useHistory()
   const handleSubmit = (e) => {
     e.preventDefault()
     props.addNew({
@@ -78,6 +78,11 @@ const CreateNew = (props) => {
       info,
       votes: 0
     })
+    history.push('/')
+    props.setNotification(`created new anecdote ${content}`)
+    setTimeout(() => {
+      props.setNotification(``)
+    }, 10000)
   }
 
   return (
@@ -101,6 +106,17 @@ const CreateNew = (props) => {
     </div>
   )
 
+}
+
+const Notification = ({content}) => {
+  if (content === '') {
+    return null
+  }
+  else return (
+    <div>
+      {content}
+    </div>
+  )
 }
 
 const App = () => {
@@ -161,12 +177,13 @@ const App = () => {
               <About />
             </Route>
             <Route path = '/create'>
-              <CreateNew addNew={addNew} />
+              <CreateNew addNew={addNew} setNotification = {setNotification}/>
             </Route>
             <Route path = '/anecdotes/:id'>
               <Anecdote anecdote = {anecdote} />
             </Route>
             <Route path = '/'>
+              <Notification content = {notification}/>
               <AnecdoteList anecdotes={anecdotes} />
             </Route>
           </Switch>
