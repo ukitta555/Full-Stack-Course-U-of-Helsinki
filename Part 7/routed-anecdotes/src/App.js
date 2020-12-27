@@ -69,6 +69,7 @@ const CreateNew = (props) => {
   const author = useField('text')
   const info = useField('text')
 
+
   const history = useHistory()
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -83,6 +84,12 @@ const CreateNew = (props) => {
     setTimeout(() => {
       props.setNotification(``)
     }, 10000)
+  }
+
+  const resetForm = (event) => {
+    content.reset()
+    author.reset()
+    info.reset()
   }
 
   return (
@@ -101,6 +108,7 @@ const CreateNew = (props) => {
           url for more info
           <input name='info' {...info} />
         </div>
+        <button type = 'reset' onClick = {resetForm}> reset </button>
         <button>create</button>
       </form>
     </div>
