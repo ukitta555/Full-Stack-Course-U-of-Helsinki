@@ -56,6 +56,13 @@ const About = () => (
   </div>
 )
 
+const Input = ({fieldProps, name}) => {
+  const {reset, ...props} = fieldProps
+  return (
+    <input name = {name} {...props}/>
+  )
+}
+
 const Footer = () => (
   <div>
     Anecdote app for <a href='https://courses.helsinki.fi/fi/tkt21009'>Full Stack -websovelluskehitys</a>.
@@ -68,7 +75,6 @@ const CreateNew = (props) => {
   const content = useField('text')
   const author = useField('text')
   const info = useField('text')
-
 
   const history = useHistory()
   const handleSubmit = (e) => {
@@ -98,15 +104,15 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input name='content' {...content} />
+          <Input fieldProps = {content} name = 'content'/>
         </div>
         <div>
           author
-          <input name='author' {...author} />
+          <Input fieldProps = {author} name = 'author'/>
         </div>
         <div>
           url for more info
-          <input name='info' {...info} />
+          <Input fieldProps = {info} name = 'info'/>
         </div>
         <button type = 'reset' onClick = {resetForm}> reset </button>
         <button>create</button>
