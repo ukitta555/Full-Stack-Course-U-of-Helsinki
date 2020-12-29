@@ -19,22 +19,21 @@ const useCountry = (name) => {
   const [country, setCountry] = useState(null)
   useEffect(() => {
     console.log('firing effect')
-    function fetchData() {
+    async function fetchData() {
       if (name === '') {
         setCountry(null)
       }
       else {
-        axios
-          .get(`https://restcountries.eu/rest/v2/name/${name}`, {params: {fullText: true}})
-          .then(response => {
-            console.log(response.data)
-            setCountry({data: response.data[0], found: true})
-          })
-          .catch (error => {
-            if (error.response.status === 404) {
-              setCountry({data: null, found: false})
-            }
-          })
+        try {
+          const response = await axios
+            .get(`https://restcountries.eu/rest/v2/name/${name}`, {params: {fullText: true}})
+          setCountry({data: response.data[0], found: true})
+        }
+        catch (error) {
+          if (error.response.status === 404) {
+            setCountry({data: null, found: false})
+          }
+        }
       }
     }
     fetchData()
