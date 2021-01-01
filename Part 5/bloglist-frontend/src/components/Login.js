@@ -1,17 +1,19 @@
 import React from 'react'
+import {useDispatch} from 'react-redux'
 import LoginUsername from './LoginUsername'
 import LoginPassword from './LoginPassword'
 import loginService from '../services/login'
 import blogService from '../services/blogs'
+import {setNotification} from '../reducers/NotificationReducer'
+
 
 const Login = ({
   username, setUsername,
   password, setPassword,
-  setUser,
-  setIsGood,
-  updateNotification
+  setUser
 }) =>
 {
+  const dispatch = useDispatch()
 
   const handleLogin = async (event) =>
   {
@@ -36,8 +38,10 @@ const Login = ({
     }
     catch (exception)
     {
-      setIsGood(false)
-      updateNotification('Failed to login! Wrong username or password')
+      dispatch(setNotification({
+        content: 'Failed to login! Wrong username or password',
+        isGood: false
+      }))
       console.log (`Wrong credentials ${exception}`)
     }
 
@@ -54,29 +58,31 @@ const Login = ({
     console.log(target.value)
     setPassword(target.value)
   }
-  return (<form onSubmit = {handleLogin}>
-    <h2>log in to the blog application</h2>
-    <div>
-    username
-      <LoginUsername
-        username = {username}
-        handleUsernameChange = {handleUsernameChange}
-      />
-    </div>
-    <div>
-    password
-      <LoginPassword
-        password = {password}
-        handlePasswordChange = {handlePasswordChange}
-      />
-    </div>
-    <button
-      id = 'loginButton'
-      type = "submit"
-    >
-       login
-    </button>
-  </form>)
+  return (
+    <form onSubmit = {handleLogin}>
+      <h2>log in to the blog application</h2>
+      <div>
+      username
+        <LoginUsername
+          username = {username}
+          handleUsernameChange = {handleUsernameChange}
+        />
+      </div>
+      <div>
+      password
+        <LoginPassword
+          password = {password}
+          handlePasswordChange = {handlePasswordChange}
+        />
+      </div>
+      <button
+        id = 'loginButton'
+        type = "submit"
+      >
+        login
+      </button>
+    </form>
+  )
 }
 
 export default Login

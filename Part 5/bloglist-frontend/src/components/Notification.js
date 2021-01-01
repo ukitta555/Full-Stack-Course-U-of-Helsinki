@@ -1,9 +1,9 @@
 import React from 'react'
 import '../App.css'
 
-const Notification = ({ notification, isGood }) =>
+const Notification = ({ notification }) =>
 {
-  if (notification === null)
+  if (notification.content === null)
   {
     return null
   }
@@ -11,9 +11,9 @@ const Notification = ({ notification, isGood }) =>
   return (
     <div className = {
       `Notification
-      ${isGood ? ' Good' : ' Bad'}`
+      ${notification.isGood ? ' Good' : ' Bad'}`
     }>
-      {notification}
+      {notification.content}
     </div>
   )
 }

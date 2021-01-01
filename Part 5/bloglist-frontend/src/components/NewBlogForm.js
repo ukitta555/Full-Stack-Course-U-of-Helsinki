@@ -1,6 +1,9 @@
 import React, {useState} from 'react'
-const NewBlogForm = ({ addBlog, setIsGood, updateNotifictaion }) =>
+import {useDispatch} from 'react-redux'
+import {setNotification} from '../reducers/NotificationReducer'
+const NewBlogForm = ({ addBlog}) =>
 {
+  const dispatch = useDispatch()
   const emptyBlog = {
     author: '',
     title: '',
@@ -14,14 +17,15 @@ const NewBlogForm = ({ addBlog, setIsGood, updateNotifictaion }) =>
     event.preventDefault()
     try
     {
-
       addBlog(newBlog)
       setNewBlog(emptyBlog)
     }
     catch (exception)
     {
-      setIsGood(false)
-      updateNotifictaion(exception.message)
+      dispatch(setNotification({
+        content: exception,
+        isGood: false
+      }))
     }
   }
   return (

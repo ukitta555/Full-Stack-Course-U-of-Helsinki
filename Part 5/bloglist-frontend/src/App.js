@@ -1,19 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react'
+import {useSelector, useDispatch} from 'react-redux'
 import Blogs from './components/Blogs'
 import Login from './components/Login'
 import NewBlogForm from './components/NewBlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import blogService from './services/blogs'
+import {setNotification} from './reducers/NotificationReducer'
+
 
 const App = () =>
 {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [notification, setNotification] = useState(null)
-  const [isGood, setIsGood] = useState(true)
   const [blogs, setBlogs] = useState([])
+
+  const notification = useSelector(state => state)
+  const dispatch = useDispatch()
 
   const addBlog = async (newBlog) =>
   {
@@ -26,15 +30,11 @@ const App = () =>
       }
     }
     setBlogs(blogs.concat(blogWithUsername))
-    setIsGood(true)
-    updateNotification(`a new blog ${blogFromDB.title} by ${blogFromDB.author} added`)
+    dispatch(setNotification({
+      content: `a new blog ${blogFromDB.title} by ${blogFromDB.author} added`,
+      isGood: true
+    }))
     newBlogFormRef.current.toggleVisibility()
-  }
-
-  const updateNotification = (text) =>
-  {
-    setNotification(text)
-    setTimeout(() => setNotification(null), 5000)
   }
 
   useEffect(() =>
@@ -59,8 +59,6 @@ const App = () =>
       setUsername = {setUsername}
       setPassword = {setPassword}
       setUser = {setUser}
-      setIsGood = {setIsGood}
-      updateNotification = {updateNotification}
     />
   )
 
@@ -70,15 +68,13 @@ const App = () =>
     <div>
       <Blogs
         user = {user}
-        setUser = {setUser}S
+        setUser = {setUser}
         blogs = {blogs}
         setBlogs = {setBlogs}
       />
       <Togglable buttonText = 'add new blog!' ref = {newBlogFormRef}>
         <NewBlogForm
           addBlog = {addBlog}
-          setIsGood = {setIsGood}
-          updateNotification = {updateNotification}
         />
       </Togglable>
     </div>
@@ -89,7 +85,6 @@ const App = () =>
     <div>
       <Notification
         notification = {notification}
-        isGood = {isGood}
       />
       {
         user
