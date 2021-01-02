@@ -2,8 +2,7 @@ import React, { useEffect } from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 import Blog from './Blog'
 import blogService from '../services/blogs'
-import {getBlogs, likeBlogAndSort, sortBlogs} from '../reducers/BlogsReducer'
-import cloneDeep from 'lodash/cloneDeep'
+import {getBlogs, likeBlogAndSort, removeBlog, sortBlogs} from '../reducers/BlogsReducer'
 
 
 // dispatching actions that change the state causes components to re-render
@@ -17,56 +16,17 @@ const Blogs = ({ user, setUser}) =>
     blogService.setToken(null)
     window.localStorage.removeItem('loggedBlogappUser')
   }
-  /*
-  const sortBlogsByLikes = (blogs) =>
-  {
-    const blogsCopy = cloneDeep(blogs)
-    return blogsCopy.sort((a, b) => - a.likes + b.likes)
-  }
-  */
-  // TODO
+
   const handleRemoveClick = async (blogToRemove) =>
   {
-    try
-    {
-      if (window.confirm(`Do you really want to delete '${blogToRemove.title}'?`))
-      {
-        await blogService.deleteBlog(blogToRemove)
-        const index = blogs.findIndex(
-          blog => blogToRemove.id.toString() === blog.id.toString()
-        )
-        const blogsCopy = cloneDeep(blogs)
-        blogsCopy.splice(index, 1)
-        blogs = blogsCopy
-      }
-    }
-    catch (exception)
-    {
-      console.log(exception)
-    }
+    dispatch(removeBlog(blogToRemove))
   }
-  // TODO
+
   const handleLikeClick =  async (blogToUpdate) =>
   {
     dispatch(likeBlogAndSort(blogToUpdate))
   }
 
-
-  // TODO
-  /*
-  const updateBlogs = (updatedBlog) =>
-  {
-    const index = blogs.findIndex(
-      blog =>
-      {
-        return blog.id.toString() === updatedBlog.id.toString()
-      }
-    )
-    const blogsCopy = cloneDeep(blogs)
-    blogsCopy[index] = updatedBlog
-    blogs = sortBlogsByLikes(blogsCopy)
-  }
-*/
   useEffect(() =>
   {
     async function fetchData()  {
