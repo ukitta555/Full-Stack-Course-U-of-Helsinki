@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 import Blog from './Blog'
 import blogService from '../services/blogs'
-import {getBlogs, sortBlogs} from '../reducers/BlogsReducer'
+import {getBlogs, likeBlogAndSort, sortBlogs} from '../reducers/BlogsReducer'
 import cloneDeep from 'lodash/cloneDeep'
 
 
@@ -17,13 +17,13 @@ const Blogs = ({ user, setUser}) =>
     blogService.setToken(null)
     window.localStorage.removeItem('loggedBlogappUser')
   }
-
+  /*
   const sortBlogsByLikes = (blogs) =>
   {
     const blogsCopy = cloneDeep(blogs)
     return blogsCopy.sort((a, b) => - a.likes + b.likes)
   }
-
+  */
   // TODO
   const handleRemoveClick = async (blogToRemove) =>
   {
@@ -48,12 +48,12 @@ const Blogs = ({ user, setUser}) =>
   // TODO
   const handleLikeClick =  async (blogToUpdate) =>
   {
-    const updatedBlog = await blogService.updateBlog(blogToUpdate)
-    updateBlogs(updatedBlog)
+    dispatch(likeBlogAndSort(blogToUpdate))
   }
 
 
   // TODO
+  /*
   const updateBlogs = (updatedBlog) =>
   {
     const index = blogs.findIndex(
@@ -66,7 +66,7 @@ const Blogs = ({ user, setUser}) =>
     blogsCopy[index] = updatedBlog
     blogs = sortBlogsByLikes(blogsCopy)
   }
-
+*/
   useEffect(() =>
   {
     async function fetchData()  {

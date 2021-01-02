@@ -23,6 +23,34 @@ const sortBlogsAction = () => {
   }
 }
 
+const likeBlogAction = (blogToLike) => {
+  return {
+    type: 'LIKE_BLOG',
+    blogToLike
+  }
+}
+
+const likeBlog = (allBlogs, updatedBlog)  => {
+  console.log(allBlogs, updatedBlog)
+  const index = allBlogs.findIndex(
+    blog =>
+    {
+      return blog.id.toString() === updatedBlog.id.toString()
+    }
+  )
+  const stateCopy = cloneDeep(allBlogs)
+  stateCopy[index] = updatedBlog
+  return stateCopy
+}
+
+export const likeBlogAndSort = (blogToLike) => {
+  return async (dispatch) => {
+    const updatedBlog = await blogService.updateBlog(blogToLike)
+    dispatch(likeBlogAction(updatedBlog))
+    dispatch(sortBlogs())
+  }
+}
+
 export const sortBlogs = () => {
   return dispatch => {
     dispatch(sortBlogsAction())
@@ -52,6 +80,9 @@ const blogsReducer = (state = initialState, action) => {
     case 'SORT_BLOGS': {
       const stateCopy = cloneDeep(state)
       return stateCopy.sort((a, b) => - a.likes + b.likes)
+    }
+    case 'LIKE_BLOG': {
+      return likeBlog(state, action.blogToLike)
     }
     default:
       return state
