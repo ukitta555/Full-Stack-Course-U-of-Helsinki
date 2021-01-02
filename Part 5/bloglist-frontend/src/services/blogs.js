@@ -48,7 +48,6 @@ const updateBlog = async (blogToUpdate) =>
   catch (exception)
   {
     console.log(exception.response.data.error)
-
   }
 }
 

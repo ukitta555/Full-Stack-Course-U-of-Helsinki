@@ -1,12 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react'
 import {useSelector, useDispatch} from 'react-redux'
+
 import Blogs from './components/Blogs'
 import Login from './components/Login'
 import NewBlogForm from './components/NewBlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
+
 import blogService from './services/blogs'
 import {setNotification} from './reducers/NotificationReducer'
+import {createBlog} from './reducers/BlogsReducer'
 
 
 const App = () =>
@@ -14,28 +17,9 @@ const App = () =>
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [blogs, setBlogs] = useState([])
 
-  const notification = useSelector(state => state)
+  const notification = useSelector(state => state.notification)
   const dispatch = useDispatch()
-
-  const addBlog = async (newBlog) =>
-  {
-    console.log(newBlog)
-    const blogFromDB = await blogService.createBlog(newBlog)
-    const blogWithUsername = {
-      ...blogFromDB,
-      user: {
-        name: user.name
-      }
-    }
-    setBlogs(blogs.concat(blogWithUsername))
-    dispatch(setNotification({
-      content: `a new blog ${blogFromDB.title} by ${blogFromDB.author} added`,
-      isGood: true
-    }))
-    newBlogFormRef.current.toggleVisibility()
-  }
 
   useEffect(() =>
   {
@@ -64,13 +48,28 @@ const App = () =>
 
   const newBlogFormRef = useRef()
 
+  const addBlog = async (newBlog) =>
+  {
+    dispatch(createBlog(newBlog))
+
+    const blogFromDB = {
+      ...newBlog,
+      user: {
+        name: user.name
+      }
+    }
+    dispatch(setNotification({
+      content: `a new blog ${blogFromDB.title} by ${blogFromDB.author} added`,
+      isGood: true
+    }))
+    newBlogFormRef.current.toggleVisibility()
+  }
+
   const blogsComponent = (
     <div>
       <Blogs
         user = {user}
         setUser = {setUser}
-        blogs = {blogs}
-        setBlogs = {setBlogs}
       />
       <Togglable buttonText = 'add new blog!' ref = {newBlogFormRef}>
         <NewBlogForm
