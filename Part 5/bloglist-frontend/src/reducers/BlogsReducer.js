@@ -91,7 +91,14 @@ export const getBlogs = () => {
 
 export const createBlog = (newBlog) => {
   return async dispatch => {
-    const blogFromDB = await blogService.createBlog(newBlog)
+    let blogFromDB = await blogService.createBlog(newBlog)
+    // add username so that it displays on screen after creation
+    blogFromDB = {
+      ...blogFromDB,
+      user: {
+        name: newBlog.user.name
+      }
+    }
     dispatch(createBlogAction(blogFromDB))
   }
 }

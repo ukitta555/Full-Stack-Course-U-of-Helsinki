@@ -50,16 +50,16 @@ const App = () =>
 
   const addBlog = async (newBlog) =>
   {
-    dispatch(createBlog(newBlog))
-
-    const blogFromDB = {
+    const expandedBlog = {
       ...newBlog,
       user: {
         name: user.name
       }
     }
+    console.log(expandedBlog)
+    dispatch(createBlog(expandedBlog))
     dispatch(setNotification({
-      content: `a new blog ${blogFromDB.title} by ${blogFromDB.author} added`,
+      content: `a new blog ${expandedBlog.title} by ${expandedBlog.author} added`,
       isGood: true
     }))
     newBlogFormRef.current.toggleVisibility()
