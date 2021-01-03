@@ -3,16 +3,17 @@ import {useSelector, useDispatch} from 'react-redux'
 import Blog from './Blog'
 import blogService from '../services/blogs'
 import {getBlogs, likeBlogAndSort, removeBlog, sortBlogs} from '../reducers/BlogsReducer'
-
+import {setUser} from '../reducers/UserReducer'
 
 // dispatching actions that change the state causes components to re-render
-const Blogs = ({ user, setUser}) =>
+const Blogs = () =>
 {
   let blogs = useSelector(state => state.blogs)
+  const user = useSelector (state => state.user)
   const dispatch = useDispatch()
   const logOut = () =>
   {
-    setUser(null)
+    dispatch(setUser(null))
     blogService.setToken(null)
     window.localStorage.removeItem('loggedBlogappUser')
   }

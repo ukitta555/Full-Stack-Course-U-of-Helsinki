@@ -1,18 +1,14 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {useDispatch} from 'react-redux'
 import LoginUsername from './LoginUsername'
 import LoginPassword from './LoginPassword'
-import loginService from '../services/login'
-import blogService from '../services/blogs'
 import {setNotification} from '../reducers/NotificationReducer'
+import {login} from '../reducers/UserReducer'
 
-
-const Login = ({
-  username, setUsername,
-  password, setPassword,
-  setUser
-}) =>
+const Login = () =>
 {
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
   const dispatch = useDispatch()
 
   const handleLogin = async (event) =>
@@ -20,21 +16,9 @@ const Login = ({
     event.preventDefault()
     try
     {
-      const userData = await loginService
-        .login({ username, password })
-
-      if (userData)
-      {
-        window.localStorage.setItem(
-          'loggedBlogappUser',
-          JSON.stringify(userData)
-        )
-        setUser(userData)
-        setPassword('')
-        setUsername('')
-        blogService.setToken(userData.token)
-        console.log(`logging in with ${username} ${password}`)
-      }
+      dispatch(login(username, password))
+      setPassword('')
+      setUsername('')
     }
     catch (exception)
     {
@@ -44,7 +28,6 @@ const Login = ({
       }))
       console.log (`Wrong credentials ${exception}`)
     }
-
   }
 
   const handleUsernameChange = ({ target }) =>

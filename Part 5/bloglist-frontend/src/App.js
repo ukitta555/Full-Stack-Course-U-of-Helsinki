@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 
 import Blogs from './components/Blogs'
@@ -10,15 +10,13 @@ import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import {setNotification} from './reducers/NotificationReducer'
 import {createBlog} from './reducers/BlogsReducer'
-
+import {setUser} from './reducers/UserReducer'
 
 const App = () =>
 {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
-
+  const user = useSelector(state => state.user)
   const notification = useSelector(state => state.notification)
+
   const dispatch = useDispatch()
 
   useEffect(() =>
@@ -29,7 +27,7 @@ const App = () =>
     if (loggedUserJSON)
     {
       const user = JSON.parse(loggedUserJSON)
-      setUser(user)
+      dispatch(setUser(user))
       blogService.setToken(user.token)
     }
   }, [])
@@ -38,11 +36,6 @@ const App = () =>
 
   const loginCopmonent = (
     <Login
-      username = {username}
-      password = {password}
-      setUsername = {setUsername}
-      setPassword = {setPassword}
-      setUser = {setUser}
     />
   )
 
@@ -56,7 +49,6 @@ const App = () =>
         name: user.name
       }
     }
-    console.log(expandedBlog)
     dispatch(createBlog(expandedBlog))
     dispatch(setNotification({
       content: `a new blog ${expandedBlog.title} by ${expandedBlog.author} added`,
@@ -68,8 +60,6 @@ const App = () =>
   const blogsComponent = (
     <div>
       <Blogs
-        user = {user}
-        setUser = {setUser}
       />
       <Togglable buttonText = 'add new blog!' ref = {newBlogFormRef}>
         <NewBlogForm
