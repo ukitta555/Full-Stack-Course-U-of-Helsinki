@@ -1,17 +1,23 @@
 import React, { useEffect, useRef } from 'react'
 import {useSelector, useDispatch} from 'react-redux'
+import {BrowserRouter as Router,
+  Switch, Route} from 'react-router-dom'
+
 
 import Blogs from './components/Blogs'
 import Login from './components/Login'
 import NewBlogForm from './components/NewBlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
+import Users from './components/Users'
 
 import blogService from './services/blogs'
 import {setNotification} from './reducers/NotificationReducer'
 import {createBlog} from './reducers/BlogsReducer'
 import {setUser} from './reducers/UserReducer'
 
+
+//TODO: add route handling useing react router
 const App = () =>
 {
   const user = useSelector(state => state.user)
@@ -31,13 +37,6 @@ const App = () =>
       blogService.setToken(user.token)
     }
   }, [])
-
-
-
-  const loginCopmonent = (
-    <Login
-    />
-  )
 
   const newBlogFormRef = useRef()
 
@@ -59,8 +58,7 @@ const App = () =>
 
   const blogsComponent = (
     <div>
-      <Blogs
-      />
+      <Blogs />
       <Togglable buttonText = 'add new blog!' ref = {newBlogFormRef}>
         <NewBlogForm
           addBlog = {addBlog}
@@ -72,14 +70,25 @@ const App = () =>
 
   return (
     <div>
-      <Notification
-        notification = {notification}
-      />
-      {
-        user
-          ? blogsComponent
-          : loginCopmonent
-      }
+      <h2>blogs</h2>
+      <Login />
+      <Router>
+        <Notification
+          notification = {notification}
+        />
+        <Switch>
+          <Route path = '/users/'>
+            <Users />
+          </Route>
+          <Route path = '/'>
+            {
+              user
+                ? blogsComponent
+                : null
+            }
+          </Route>
+        </Switch>
+      </Router>
     </div>
   )
 }
