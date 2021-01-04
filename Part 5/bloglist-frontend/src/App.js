@@ -20,6 +20,11 @@ import {setUser} from './reducers/UserReducer'
 //TODO: add route handling useing react router
 const App = () =>
 {
+  /*const match = useRouteMatch('/users/:id')
+    const user123 = match
+    ? 'hehe'
+    : null
+  */
   const user = useSelector(state => state.user)
   const notification = useSelector(state => state.notification)
 

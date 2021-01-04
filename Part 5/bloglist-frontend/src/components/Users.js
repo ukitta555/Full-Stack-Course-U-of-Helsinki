@@ -1,16 +1,20 @@
-import React, {useEffect, useState} from 'react'
-import userService from '../services/users'
+import React, {useEffect} from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+
+import User from './User'
+
+import {getAllUsers} from '../reducers/AllUsersReducer'
+
 
 const Users = () => {
-  const [users, setUsers] = useState([])
+  const dispatch = useDispatch()
+  const users = useSelector(state => state.users)
 
   useEffect(() => {
     async function fetchUsers() {
-      const response = await userService.getUsers()
-      return response
+      await dispatch(getAllUsers())
     }
     fetchUsers()
-      .then (response => setUsers(response))
   },[])
 
   return (
@@ -28,14 +32,10 @@ const Users = () => {
           </tr>
           {users.map(user => {
             return (
-              <tr key = {user.id}>
-                <td>
-                  {user.name}
-                </td>
-                <td>
-                  {user.blogs.length}
-                </td>
-              </tr>
+              <User
+                key = {user.id}
+                user = {user}
+              />
             )
           })}
         </tbody>

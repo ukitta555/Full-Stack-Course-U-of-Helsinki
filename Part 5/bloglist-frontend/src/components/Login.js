@@ -55,6 +55,8 @@ const Login = () =>
   }
 
   let userInfo
+  // if logged in, load user info
+  // otherwise, load login form
   if (user) {
     userInfo = (
       <div>
