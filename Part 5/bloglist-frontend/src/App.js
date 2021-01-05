@@ -104,7 +104,7 @@ const App = () =>
 
   return (
     <div>
-      <h2>Blogs</h2>
+      <h2>Blogs app</h2>
       <Login />
       <Notification
         notification = {notification}

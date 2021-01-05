@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
+import {Link} from 'react-router-dom'
 
 import LoginUsername from './LoginUsername'
 import LoginPassword from './LoginPassword'
@@ -10,6 +11,10 @@ import {login, setUser} from '../reducers/UserReducer'
 
 const Login = () =>
 {
+  const padding = {
+    padding: 5
+  }
+
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -61,6 +66,8 @@ const Login = () =>
     userInfo = (
       <div>
         <p>
+          <Link style = {padding} to="/">home</Link>
+          <Link style = {padding} to="/users">users</Link>
           {user.name} logged in
           <button
             type="button"
