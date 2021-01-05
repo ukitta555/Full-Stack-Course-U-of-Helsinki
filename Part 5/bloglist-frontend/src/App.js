@@ -10,27 +10,35 @@ import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import Users from './components/Users'
 import User from './components/User'
+import Blog from './components/Blog'
 
 import blogService from './services/blogs'
 import {setNotification} from './reducers/NotificationReducer'
-import {createBlog} from './reducers/BlogsReducer'
+import {createBlog, getBlogs, sortBlogs} from './reducers/BlogsReducer'
 import {setUser} from './reducers/UserReducer'
 import {getAllUsers} from './reducers/AllUsersReducer'
 
-//TODO: add route handling using react router
+
+
 const App = () =>
 {
-  const match = useRouteMatch('/users/:id')
+  const matchUser = useRouteMatch('/users/:id')
+  const matchBlog = useRouteMatch('/blogs/:id')
   const user = useSelector(state => state.user)
   const notification = useSelector(state => state.notification)
   const users = useSelector (state => state.users)
+  const blogs = useSelector (state => state.blogs)
   const dispatch = useDispatch()
 
-  //TODO use redux state to find matching user
-  const userToShow = match
+
+  const userToShow = matchUser
     ? users.find (user => {
-      return user.id === match.params.id
+      return user.id === matchUser.params.id
     })
+    : null
+
+  const blogToShow = matchBlog
+    ? blogs.find (blog => blog.id === matchBlog.params.id)
     : null
 
 
@@ -40,6 +48,16 @@ const App = () =>
     }
     fetchUsers()
   },[])
+
+
+  useEffect(() =>
+  {
+    async function fetchData()  {
+      await dispatch(getBlogs())
+      dispatch(sortBlogs())
+    }
+    fetchData()
+  }, [])
 
   useEffect(() =>
   {
@@ -97,6 +115,9 @@ const App = () =>
         </Route>
         <Route path = '/users/'>
           <Users />
+        </Route>
+        <Route path = '/blogs/:id'>
+          <Blog blog = {blogToShow} view = 'oneBlog'/>
         </Route>
         <Route path = '/'>
           {

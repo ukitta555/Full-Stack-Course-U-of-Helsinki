@@ -1,12 +1,18 @@
-import React, { useState } from 'react'
-import {useSelector} from 'react-redux'
+import React from 'react'
+import {useDispatch, useSelector} from 'react-redux'
+import {Link, useHistory} from 'react-router-dom'
+import { removeBlog, likeBlogAndSort} from '../reducers/BlogsReducer'
 
-const Blog = ({ blog, handleLikeClick, handleRemoveClick }) =>
+const Blog = ({ blog, view }) =>
 {
+  const history = useHistory()
   const user = useSelector (state => state.user)
-  const [isInformationHidden, setIsInformationHidden] = useState (true)
+  const dispatch = useDispatch ()
+  if (!blog) {
+    return null
+  }
 
-  const blogStyle =
+  const blogShortStyle =
   {
     paddingTop: 10,
     paddingLeft: 2,
@@ -15,11 +21,18 @@ const Blog = ({ blog, handleLikeClick, handleRemoveClick }) =>
     marginBottom: 5
   }
 
-  const toggleInforamtion = () =>
+  const handleRemoveClick = async (blogToRemove) =>
   {
-    setIsInformationHidden(!isInformationHidden)
+    dispatch(removeBlog(blogToRemove))
+    if (view === 'oneBlog') {
+      history.push('/')
+    }
   }
 
+  const handleLikeClick =  async (blogToUpdate) =>
+  {
+    dispatch(likeBlogAndSort(blogToUpdate))
+  }
 
   const removeButtonDisplay = (blog.user.name === user.name)
     ? { display : '' }
@@ -29,7 +42,7 @@ const Blog = ({ blog, handleLikeClick, handleRemoveClick }) =>
   const Info = (
     <div>
       <p>
-        URL: {blog.url}
+        URL: <a href = {blog.url}> {blog.url} </a>
       </p>
       <p className = 'blogLikes'>
         Likes: {blog.likes}
@@ -55,20 +68,24 @@ const Blog = ({ blog, handleLikeClick, handleRemoveClick }) =>
 
 
   return (
-    <div style = {blogStyle} className = 'blog'>
-      {blog.title} {blog.author}
-      <button
-        onClick = {toggleInforamtion}
-        className = 'viewButton'
-      >
-         view
-      </button>
-      <div>
-        {
-          isInformationHidden ? '' : Info
-        }
-      </div>
-    </div>
+    <>
+      {
+        view === 'oneBlog'
+          ?
+          <div className = 'blog'>
+            <h2> {blog.title} by {blog.author} </h2>
+            <div>
+              {
+                Info
+              }
+            </div>
+          </div>
+          :
+          <div style = {blogShortStyle}  className = 'blog'>
+            <Link to = {`/blogs/${blog.id}`}>{blog.title} by {blog.author} </Link>
+          </div>
+      }
+    </>
   )
 }
 
