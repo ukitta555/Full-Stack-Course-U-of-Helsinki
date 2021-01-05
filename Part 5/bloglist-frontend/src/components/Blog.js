@@ -1,4 +1,5 @@
 import React from 'react'
+import Comments from './Comments'
 import {useDispatch, useSelector} from 'react-redux'
 import {Link, useHistory} from 'react-router-dom'
 import { removeBlog, likeBlogAndSort} from '../reducers/BlogsReducer'
@@ -79,6 +80,7 @@ const Blog = ({ blog, view }) =>
                 Info
               }
             </div>
+            <Comments comments = {blog.comments}/>
           </div>
           :
           <div style = {blogShortStyle}  className = 'blog'>

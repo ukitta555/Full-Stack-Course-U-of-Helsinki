@@ -3,8 +3,12 @@ const blogsRouter = require('express').Router()
 const Blog = require ('../models/blog')
 const User = require ('../models/user')
 
+
+// implement multiple populates
 blogsRouter.get('/', async (request, response) => {
-  const allBlogs = await Blog.find({}).populate('user', { blogs: 0 })
+  const allBlogs = await Blog.find({})
+    .populate('user', { blogs: 0 })
+    .populate('comments', { blog: 0 })
   response.status(200).json(allBlogs)
 })
 
