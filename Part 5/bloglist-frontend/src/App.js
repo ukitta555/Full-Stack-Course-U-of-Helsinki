@@ -82,7 +82,7 @@ const App = () =>
         name: user.name
       }
     }
-    dispatch(createBlog(expandedBlog))
+    await dispatch(createBlog(expandedBlog))
     dispatch(setNotification({
       content: `a new blog ${expandedBlog.title} by ${expandedBlog.author} added`,
       isGood: true

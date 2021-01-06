@@ -1,7 +1,6 @@
-POST http://localhost:3001/api/comments
+POST http://localhost:3001/api/blogs/5fb6ef0993e63f0ea4d81715/comments
 Content-Type: application/json
 
 {
-  "comment": "Another one bites the dust!",
-  "id": "5fbfefee48fded23b0ca0311"
+  "comment": "Another one bites the dust!"
 }

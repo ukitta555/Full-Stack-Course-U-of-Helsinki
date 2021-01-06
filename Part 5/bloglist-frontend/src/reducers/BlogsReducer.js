@@ -29,6 +29,14 @@ const likeBlogAction = (blogToLike) => {
   }
 }
 
+const addCommentAction = (comment) => {
+  return {
+    type: 'ADD_COMMENT',
+    comment
+  }
+}
+
+
 const removeBlogAction = (blogToRemove) => {
   return {
     type: 'REMOVE_BLOG',
@@ -40,6 +48,22 @@ const removeBlogFromState = (allBlogs, blogToRemove) => {
   return allBlogs.filter(blog => {
     return blogToRemove.id !== blog.id
   })
+}
+
+const addCommentToState = (allBlogs, comment) => {
+  console.log('Comment', comment, 'blogs', allBlogs)
+  const blog = allBlogs.find(blog =>
+    blog.id === comment.blog
+  )
+  const updatedBlog = {
+    ...blog,
+    comments: blog.comments.concat(comment)
+  }
+  return allBlogs.map(blog =>
+    (blog.id === comment.blog)
+      ? updatedBlog
+      : blog
+  )
 }
 
 export const removeBlog = (blogToRemove) => {
@@ -76,7 +100,7 @@ export const sortBlogs = () => {
 
 export const likeBlogAndSort = (blogToLike) => {
   return async (dispatch) => {
-    const updatedBlog = await blogService.updateBlog(blogToLike)
+    const updatedBlog = await blogService.likeBlog(blogToLike)
     dispatch(likeBlogAction(updatedBlog))
     dispatch(sortBlogs())
   }
@@ -103,6 +127,14 @@ export const createBlog = (newBlog) => {
   }
 }
 
+export const addComment = (comment, id) => {
+  return async dispatch => {
+    const returnedComment = await blogService.addComment(comment, id)
+    dispatch(addCommentAction(returnedComment))
+  }
+}
+
+// TODO: implement ADD_COMMENT & move async request to thunk
 const blogsReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'GET_BLOGS':
@@ -118,6 +150,9 @@ const blogsReducer = (state = initialState, action) => {
     }
     case 'REMOVE_BLOG': {
       return removeBlogFromState(state, action.blogToRemove)
+    }
+    case 'ADD_COMMENT': {
+      return addCommentToState(state, action.comment)
     }
     default:
       return state

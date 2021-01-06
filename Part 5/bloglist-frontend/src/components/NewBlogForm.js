@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import {useDispatch} from 'react-redux'
 import {setNotification} from '../reducers/NotificationReducer'
-const NewBlogForm = ({ addBlog}) =>
+const NewBlogForm = ({ addBlog }) =>
 {
   const dispatch = useDispatch()
   const emptyBlog = {
@@ -17,7 +17,7 @@ const NewBlogForm = ({ addBlog}) =>
     event.preventDefault()
     try
     {
-      addBlog(newBlog)
+      await addBlog(newBlog)
       setNewBlog(emptyBlog)
     }
     catch (exception)

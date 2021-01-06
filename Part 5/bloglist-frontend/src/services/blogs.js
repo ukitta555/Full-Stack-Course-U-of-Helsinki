@@ -21,15 +21,13 @@ const getAll = async () =>
   return response.data
 }
 
-const updateBlog = async (blogToUpdate) =>
+const likeBlog = async (blogToUpdate) =>
 {
   try
   {
     const newBlog =
     {
-      title: blogToUpdate.title,
-      author: blogToUpdate.author,
-      url: blogToUpdate.url,
+      ...blogToUpdate,
       likes: blogToUpdate.likes + 1,
       user: blogToUpdate.user.id
     }
@@ -51,13 +49,32 @@ const updateBlog = async (blogToUpdate) =>
   }
 }
 
+const addComment = async (comment, id) => {
+  try {
+    console.log(`${baseUrl}/${id}/comments`)
+    const response = await axios.post (
+      `${baseUrl}/${id}/comments`,
+      comment
+    )
+    return response.data
+  }
+  catch (exception) {
+    console.log(exception)
+  }
+}
+
 const createBlog = async (newBlog) =>
 {
-  const config = {
-    headers: { Authorization: token }
+  try {
+    const config = {
+      headers: { Authorization: token }
+    }
+    const response =  await axios.post(baseUrl, newBlog, config)
+    return response.data
   }
-  const response =  await axios.post(baseUrl, newBlog, config)
-  return response.data
+  catch (exception) {
+    console.log(exception)
+  }
 }
 
 const deleteBlog = async (blogToRemove) =>
@@ -77,4 +94,13 @@ const deleteBlog = async (blogToRemove) =>
   }
 
 }
-export default { getAll, createBlog, updateBlog, setToken, deleteBlog }
+
+export default
+{
+  getAll,
+  createBlog,
+  likeBlog,
+  setToken,
+  deleteBlog,
+  addComment
+}

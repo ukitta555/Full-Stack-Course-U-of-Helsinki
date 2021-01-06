@@ -1,14 +1,12 @@
 import React from 'react'
 import Comments from './Comments'
-import {useDispatch, useSelector} from 'react-redux'
-import {Link, useHistory} from 'react-router-dom'
-import { removeBlog, likeBlogAndSort} from '../reducers/BlogsReducer'
+import BlogInfo from './BlogInfo'
+import CommentForm from './CommentForm'
+import {Link} from 'react-router-dom'
+
 
 const Blog = ({ blog, view }) =>
 {
-  const history = useHistory()
-  const user = useSelector (state => state.user)
-  const dispatch = useDispatch ()
   if (!blog) {
     return null
   }
@@ -22,50 +20,7 @@ const Blog = ({ blog, view }) =>
     marginBottom: 5
   }
 
-  const handleRemoveClick = async (blogToRemove) =>
-  {
-    dispatch(removeBlog(blogToRemove))
-    if (view === 'oneBlog') {
-      history.push('/')
-    }
-  }
 
-  const handleLikeClick =  async (blogToUpdate) =>
-  {
-    dispatch(likeBlogAndSort(blogToUpdate))
-  }
-
-  const removeButtonDisplay = (blog.user.name === user.name)
-    ? { display : '' }
-    : { display : 'none' }
-
-
-  const Info = (
-    <div>
-      <p>
-        URL: <a href = {blog.url}> {blog.url} </a>
-      </p>
-      <p className = 'blogLikes'>
-        Likes: {blog.likes}
-        <button
-          onClick = {() => handleLikeClick(blog)}
-          className = 'likeButton'
-        >
-          like
-        </button>
-      </p>
-      <p>
-        Created by: {blog.user.name}
-      </p>
-      <button
-        onClick = {() => handleRemoveClick(blog)}
-        style = {removeButtonDisplay}
-        className = 'removeButton'
-      >
-        remove
-      </button>
-    </div>
-  )
 
 
   return (
@@ -75,11 +30,8 @@ const Blog = ({ blog, view }) =>
           ?
           <div className = 'blog'>
             <h2> {blog.title} by {blog.author} </h2>
-            <div>
-              {
-                Info
-              }
-            </div>
+            <BlogInfo blog = {blog} view = {view}/>
+            <CommentForm blog = {blog} />
             <Comments comments = {blog.comments}/>
           </div>
           :
