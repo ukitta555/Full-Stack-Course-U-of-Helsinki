@@ -1,6 +1,8 @@
 import React, {useState} from 'react'
 import {useDispatch} from 'react-redux'
 import {setNotification} from '../reducers/NotificationReducer'
+import {Button, TextField} from '@material-ui/core'
+import flexInput from '../styles/flexInput'
 const NewBlogForm = ({ addBlog }) =>
 {
   const dispatch = useDispatch()
@@ -28,11 +30,13 @@ const NewBlogForm = ({ addBlog }) =>
       }))
     }
   }
+
+
   return (
     <form onSubmit = {createBlog} className = 'newBlogForm'>
-      <div>
-        title
-        <input
+      <div style = {flexInput}>
+        Title:
+        <TextField
           id = 'title'
           type = 'text'
           value = {newBlog.title}
@@ -43,11 +47,11 @@ const NewBlogForm = ({ addBlog }) =>
             }
           )}
         >
-        </input>
+        </TextField>
       </div>
-      <div>
-        author
-        <input
+      <div style = {flexInput}>
+        Author:
+        <TextField
           id = 'author'
           type = 'text'
           value = {newBlog.author}
@@ -58,11 +62,11 @@ const NewBlogForm = ({ addBlog }) =>
             }
           )}
         >
-        </input>
+        </TextField>
       </div>
-      <div>
-        url
-        <input
+      <div style = {flexInput}>
+        URL:
+        <TextField
           id = 'url'
           type = 'text'
           value = {newBlog.url}
@@ -73,14 +77,14 @@ const NewBlogForm = ({ addBlog }) =>
             }
           )}
         >
-        </input>
+        </TextField>
       </div>
-      <button
+      <Button variant="contained"
         id = 'createNewBlogButton'
         type = 'submit'
       >
          Create new blog!
-      </button>
+      </Button>
     </form>
   )
 }

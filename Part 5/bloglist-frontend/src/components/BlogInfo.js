@@ -2,12 +2,14 @@ import React from 'react'
 import {useHistory} from 'react-router-dom'
 import {useDispatch, useSelector} from 'react-redux'
 import { removeBlog, likeBlogAndSort} from '../reducers/BlogsReducer'
+import {Button} from '@material-ui/core'
 
 const BlogInfo = ({blog, view}) => {
   const history = useHistory()
   const dispatch = useDispatch ()
 
   const user = useSelector (state => state.user)
+
   const removeButtonDisplay = (blog.user.name === user.name)
     ? { display : '' }
     : { display : 'none' }
@@ -33,23 +35,23 @@ const BlogInfo = ({blog, view}) => {
       </p>
       <p className = 'blogLikes'>
         Likes: {blog.likes}
-        <button
+        <Button variant="contained"
           onClick = {() => handleLikeClick(blog)}
           className = 'likeButton'
         >
           like
-        </button>
+        </Button>
       </p>
       <p>
         Created by: {blog.user.name}
       </p>
-      <button
+      <Button variant="contained"
         onClick = {() => handleRemoveClick(blog)}
         style = {removeButtonDisplay}
         className = 'removeButton'
       >
         remove
-      </button>
+      </Button>
     </div>
   )
 }

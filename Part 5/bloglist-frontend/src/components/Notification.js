@@ -1,5 +1,5 @@
 import React from 'react'
-import '../App.css'
+import { Alert } from '@material-ui/lab'
 
 const Notification = ({ notification }) =>
 {
@@ -9,11 +9,12 @@ const Notification = ({ notification }) =>
   }
 
   return (
-    <div className = {
-      `Notification
-      ${notification.isGood ? ' Good' : ' Bad'}`
-    }>
-      {notification.content}
+    <div>
+      {(notification.content &&
+        <Alert severity={notification.isGood ? 'success' : 'error'}>
+          {notification.content}
+        </Alert>
+      )}
     </div>
   )
 }

@@ -3,25 +3,13 @@ import Comments from './Comments'
 import BlogInfo from './BlogInfo'
 import CommentForm from './CommentForm'
 import {Link} from 'react-router-dom'
-
+import  { TableCell } from '@material-ui/core'
 
 const Blog = ({ blog, view }) =>
 {
   if (!blog) {
     return null
   }
-
-  const blogShortStyle =
-  {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5
-  }
-
-
-
 
   return (
     <>
@@ -35,9 +23,14 @@ const Blog = ({ blog, view }) =>
             <Comments comments = {blog.comments}/>
           </div>
           :
-          <div style = {blogShortStyle}  className = 'blog'>
-            <Link to = {`/blogs/${blog.id}`}>{blog.title} by {blog.author} </Link>
-          </div>
+          <>
+            <TableCell>
+              <Link to = {`/blogs/${blog.id}`}>{blog.title} </Link>
+            </TableCell>
+            <TableCell>
+              by {blog.author}
+            </TableCell>
+          </>
       }
     </>
   )

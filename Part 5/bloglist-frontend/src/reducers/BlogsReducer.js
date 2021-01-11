@@ -100,6 +100,10 @@ export const sortBlogs = () => {
 
 export const likeBlogAndSort = (blogToLike) => {
   return async (dispatch) => {
+    blogToLike = {
+      ...blogToLike,
+      comments: blogToLike.comments.map (comment => comment.id)
+    }
     const updatedBlog = await blogService.likeBlog(blogToLike)
     dispatch(likeBlogAction(updatedBlog))
     dispatch(sortBlogs())

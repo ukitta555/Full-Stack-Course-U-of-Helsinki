@@ -1,33 +1,21 @@
 import React, {useState} from 'react'
-import {useDispatch, useSelector} from 'react-redux'
-import {Link} from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 
 import LoginUsername from './LoginUsername'
 import LoginPassword from './LoginPassword'
+import {Button} from '@material-ui/core'
 
-import blogService from '../services/blogs'
 import {setNotification} from '../reducers/NotificationReducer'
-import {login, setUser} from '../reducers/UserReducer'
+import {login} from '../reducers/UserReducer'
+
 
 const Login = () =>
 {
-  const padding = {
-    padding: 5
-  }
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
   const dispatch = useDispatch()
-  const user = useSelector (state => state.user)
-
-  const logOut = () =>
-  {
-    dispatch(setUser(null))
-    blogService.setToken(null)
-    window.localStorage.removeItem('loggedBlogappUser')
-  }
-
   const handleLogin = async (event) =>
   {
     event.preventDefault()
@@ -59,58 +47,31 @@ const Login = () =>
     setPassword(target.value)
   }
 
-  let userInfo
-  // if logged in, load user info
-  // otherwise, load login form
-  if (user) {
-    userInfo = (
-      <div>
-        <p>
-          <Link style = {padding} to="/">home</Link>
-          <Link style = {padding} to="/users">users</Link>
-          {user.name} logged in
-          <button
-            type="button"
-            onClick = {logOut}
-            id = 'logoutButton'
-          >
-            logout
-          </button>
-        </p>
-      </div>
-    )
-  }
-  else {
-    userInfo = (
+  return (
+    <div>
       <form onSubmit = {handleLogin}>
         <h2>log in to the blog application</h2>
         <div>
-        username
           <LoginUsername
             username = {username}
             handleUsernameChange = {handleUsernameChange}
           />
         </div>
         <div>
-        password
           <LoginPassword
             password = {password}
             handlePasswordChange = {handlePasswordChange}
           />
         </div>
-        <button
+        <Button
+          variant="contained"
           id = 'loginButton'
           type = "submit"
+          color = 'primary'
         >
           login
-        </button>
+        </Button>
       </form>
-    )
-  }
-
-  return (
-    <div>
-      {userInfo}
     </div>
   )
 }

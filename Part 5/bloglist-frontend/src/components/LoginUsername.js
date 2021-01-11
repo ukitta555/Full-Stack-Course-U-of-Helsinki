@@ -1,15 +1,18 @@
 import React from 'react'
+import {TextField} from '@material-ui/core'
 
 const LoginUsername = ({ username, handleUsernameChange }) =>
 {
-  return (<input
+  return (<TextField
     type = 'text'
     id = 'loginUsernameInput'
     value = {username}
     name = 'Username'
     onChange = {handleUsernameChange}
+    label = 'username'
+    autoComplete = "username"
   >
 
-  </input>)
+  </TextField>)
 }
 export default LoginUsername

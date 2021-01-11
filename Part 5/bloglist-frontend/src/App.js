@@ -11,6 +11,8 @@ import Togglable from './components/Togglable'
 import Users from './components/Users'
 import User from './components/User'
 import Blog from './components/Blog'
+import Navigation from './components/Navigation'
+import Container from '@material-ui/core/Container'
 
 import blogService from './services/blogs'
 import {setNotification} from './reducers/NotificationReducer'
@@ -103,31 +105,37 @@ const App = () =>
 
 
   return (
-    <div>
-      <h2>Blogs app</h2>
-      <Login />
-      <Notification
-        notification = {notification}
-      />
-      <Switch>
-        <Route path = '/users/:id'>
-          <User user = {userToShow}/>
-        </Route>
-        <Route path = '/users/'>
-          <Users />
-        </Route>
-        <Route path = '/blogs/:id'>
-          <Blog blog = {blogToShow} view = 'oneBlog'/>
-        </Route>
-        <Route path = '/'>
-          {
-            user
-              ? blogsComponent
-              : null
-          }
-        </Route>
-      </Switch>
-    </div>
+    <Container>
+      <div>
+        <Notification
+          notification = {notification}
+        />
+        <h2 style = {{fontFamily: 'Tangerine, serif'}}>Blogs app</h2>
+        {
+          user
+            ? <Navigation />
+            : <Login />
+        }
+        <Switch>
+          <Route path = '/users/:id'>
+            <User user = {userToShow}/>
+          </Route>
+          <Route path = '/users/'>
+            <Users />
+          </Route>
+          <Route path = '/blogs/:id'>
+            <Blog blog = {blogToShow} view = 'oneBlog'/>
+          </Route>
+          <Route path = '/'>
+            {
+              user
+                ? blogsComponent
+                : null
+            }
+          </Route>
+        </Switch>
+      </div>
+    </Container>
   )
 }
 

@@ -1,14 +1,17 @@
 import React from 'react'
+import {TextField} from '@material-ui/core'
 
 const LoginPassword = ({ password, handlePasswordChange }) => (
-  <input
+  <TextField
     type = 'password'
     id = 'loginPasswordInput'
     value = {password}
     name = "Password"
     onChange = {handlePasswordChange}
+    label="password"
+    autoComplete = "current-password"
   >
-  </input>
+  </TextField>
 )
 
 export default LoginPassword
