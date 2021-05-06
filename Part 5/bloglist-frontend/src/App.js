@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
-import {useSelector, useDispatch} from 'react-redux'
-import {Switch, Route, useRouteMatch} from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { Switch, Route, useRouteMatch } from 'react-router-dom'
 
 
 import Blogs from './components/Blogs'
@@ -15,10 +15,10 @@ import Navigation from './components/Navigation'
 import Container from '@material-ui/core/Container'
 
 import blogService from './services/blogs'
-import {setNotification} from './reducers/NotificationReducer'
-import {createBlog, getBlogs, sortBlogs} from './reducers/BlogsReducer'
-import {setUser} from './reducers/UserReducer'
-import {getAllUsers} from './reducers/AllUsersReducer'
+import { setNotification } from './reducers/NotificationReducer'
+import { createBlog, getBlogs, sortBlogs } from './reducers/BlogsReducer'
+import { setUser } from './reducers/UserReducer'
+import { getAllUsers } from './reducers/AllUsersReducer'
 
 
 
@@ -28,33 +28,37 @@ const App = () =>
   const matchBlog = useRouteMatch('/blogs/:id')
   const user = useSelector(state => state.user)
   const notification = useSelector(state => state.notification)
-  const users = useSelector (state => state.users)
-  const blogs = useSelector (state => state.blogs)
+  const users = useSelector(state => state.users)
+  const blogs = useSelector(state => state.blogs)
   const dispatch = useDispatch()
 
 
   const userToShow = matchUser
-    ? users.find (user => {
+    ? users.find(user =>
+    {
       return user.id === matchUser.params.id
     })
     : null
 
   const blogToShow = matchBlog
-    ? blogs.find (blog => blog.id === matchBlog.params.id)
+    ? blogs.find(blog => blog.id === matchBlog.params.id)
     : null
-
-
-  useEffect(() => {
-    async function fetchUsers() {
-      await dispatch(getAllUsers())
-    }
-    fetchUsers()
-  },[])
 
 
   useEffect(() =>
   {
-    async function fetchData()  {
+    async function fetchUsers()
+    {
+      await dispatch(getAllUsers())
+    }
+    fetchUsers()
+  }, [])
+
+
+  useEffect(() =>
+  {
+    async function fetchData()
+    {
       await dispatch(getBlogs())
       dispatch(sortBlogs())
     }
@@ -66,8 +70,7 @@ const App = () =>
     const loggedUserJSON = window.localStorage.getItem(
       'loggedBlogappUser'
     )
-    if (loggedUserJSON)
-    {
+    if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       dispatch(setUser(user))
       blogService.setToken(user.token)
@@ -95,9 +98,9 @@ const App = () =>
   const blogsComponent = (
     <div>
       <Blogs />
-      <Togglable buttonText = 'add new blog!' ref = {newBlogFormRef}>
+      <Togglable buttonText='add new blog!' ref={newBlogFormRef}>
         <NewBlogForm
-          addBlog = {addBlog}
+          addBlog={addBlog}
         />
       </Togglable>
     </div>
@@ -108,32 +111,34 @@ const App = () =>
     <Container>
       <div>
         <Notification
-          notification = {notification}
+          notification={notification}
         />
-        <h2 style = {{fontFamily: 'Tangerine, serif'}}>Blogs app</h2>
+        <h2 style={{ fontFamily: 'Tangerine, serif' }}>Blogs app</h2>
         {
           user
-            ? <Navigation />
+            ? <>
+              <Navigation />
+              <Switch>
+                <Route path='/users/:id'>
+                  <User user={userToShow} />
+                </Route>
+                <Route path='/users/'>
+                  <Users />
+                </Route>
+                <Route path='/blogs/:id'>
+                  <Blog blog={blogToShow} view='oneBlog' />
+                </Route>
+                <Route path='/'>
+                  {
+                    user
+                      ? blogsComponent
+                      : null
+                  }
+                </Route>
+              </Switch>
+            </>
             : <Login />
         }
-        <Switch>
-          <Route path = '/users/:id'>
-            <User user = {userToShow}/>
-          </Route>
-          <Route path = '/users/'>
-            <Users />
-          </Route>
-          <Route path = '/blogs/:id'>
-            <Blog blog = {blogToShow} view = 'oneBlog'/>
-          </Route>
-          <Route path = '/'>
-            {
-              user
-                ? blogsComponent
-                : null
-            }
-          </Route>
-        </Switch>
       </div>
     </Container>
   )

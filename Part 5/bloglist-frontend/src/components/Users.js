@@ -20,7 +20,7 @@ const Users = () => {
       <p>
         <Typography variant = 'h4'> Users </Typography>
       </p>
-      <TableContainer compoonent = {Paper}>
+      <TableContainer component = {Paper}>
         <Table>
           <TableBody>
             <TableRow>
