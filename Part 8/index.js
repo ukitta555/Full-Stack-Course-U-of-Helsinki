@@ -83,6 +83,8 @@ let books = [
   },
 ]
 
+
+// what type should I write inside allAuthors?
 const typeDefs = gql`
   type Book {
     title: String!
@@ -96,12 +98,14 @@ const typeDefs = gql`
     name: String!
     id: ID!
     born: String!
+    bookCount: Int!
   }
 
   type Query {
     bookCount: Int!
     authorCount: Int!
-    allBooks: [Book!]!
+    allBooks(author: String!): [Book!]!
+    allAuthors: [Author!]!
   }
 `
 
@@ -109,7 +113,16 @@ const resolvers = {
   Query: {
     bookCount: () => books.length,
     authorCount: () => authors.length,
-    allBooks: () => books
+    allBooks: (root, args) => {
+      if (args.author) {
+        return books.filter(book => book.author === args.author)
+      }
+      else return books
+    },
+    allAuthors: () => authors
+  },
+  Author: {
+    bookCount: (root) => books.filter(book => book.author === root.name).length
   }
 }
 

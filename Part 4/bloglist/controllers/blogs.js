@@ -82,7 +82,7 @@ blogsRouter.put('/:id', async (request, response) => {
 
   console.log('updated blog:',updatedBlogWithID)
   if (updatedBlogWithID) {
-    response.status(201).json(updatedBlogWithID)
+    response.status(204).json(updatedBlogWithID)
   }
   else
   {
