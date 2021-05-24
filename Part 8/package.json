@@ -10,6 +10,8 @@
   "license": "MIT",
   "dependencies": {
     "apollo-server": "^2.21.0",
-    "graphql": "^15.5.0"
+    "graphql": "^15.5.0",
+    "lodash": "^4.17.21",
+    "uuidv4": "^6.2.8"
   }
 }
