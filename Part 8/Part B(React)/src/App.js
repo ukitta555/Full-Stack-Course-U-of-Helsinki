@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react'
-import Authors from './components/Authors'
+import Authors from './components/authors/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
 

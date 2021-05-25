@@ -147,7 +147,7 @@ const resolvers = {
     addBook: (root, args) => {
       const authorExists = authors.some(author => author.name === args.author)
       if (!authorExists) {
-        authors = authors.concat({ name: args.author, born: null })
+        authors = authors.concat({ name: args.author, born: null, id: uuid() })
       }
       const newBook = { ...args, id: uuid() }
       books = books.concat(newBook)
