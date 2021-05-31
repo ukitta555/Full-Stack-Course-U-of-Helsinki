@@ -13,7 +13,16 @@ const MUTATION_TYPE = `
     editAuthor(
       name: String!,
       setBornTo: Int!
-    ): Author
+    ): Author,
+    createUser(
+      username: String!
+      favouriteGenre: String!
+    ): User,
+    login(
+      username: String!
+      password: String!
+    ): Token,
+    me: User
   }
 `
 
