@@ -1,11 +1,11 @@
 
 import React, { useState, useEffect } from 'react'
 import Authors from './components/authors/Authors'
-import Books from './components/Books'
+import Books from './components/books/Books'
 import NewBook from './components/NewBook'
 import Login from './components/Login'
 import { useApolloClient } from '@apollo/client'
-import Recommendations from './components/Recommendations'
+import Recommendations from './components/books/Recommendations'
 
 const App = () => {
   const [page, setPage] = useState('authors')

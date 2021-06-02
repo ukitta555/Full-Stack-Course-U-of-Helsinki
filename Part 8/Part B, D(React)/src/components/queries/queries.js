@@ -68,3 +68,11 @@ mutation login($username: String!, $password: String!){
   }
 }
 `
+
+export const GET_FAVOURITE_GENRE = gql`
+query getFavouriteGenre{
+  me{
+    favouriteGenre
+  }
+}
+`
