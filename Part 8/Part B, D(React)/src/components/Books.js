@@ -1,10 +1,27 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useQuery } from '@apollo/client'
 import { ALL_BOOKS } from './queries/queries'
-
+import { Set } from 'immutable'
 
 const Books = (props) => {
   const result = useQuery(ALL_BOOKS)
+  const [genres, setGenres] = useState(Set([]))
+  const [books, setBooks] = useState([])
+  const [selectedGenre, setSelectedGenre] = useState(null)
+
+  useEffect(() => {
+    if (result.data) {
+      setBooks(result.data.allBooks)
+      let allGenres = Set([])
+      for (let book of result.data.allBooks) {
+        for (let genre of book.genres) {
+          allGenres = allGenres.add(genre)
+        }
+      }
+      setGenres(allGenres)
+    }
+  }, [result.data])
+
   if (!props.show) {
     return null
   }
@@ -12,8 +29,6 @@ const Books = (props) => {
   if (result.loading) {
     return <div> loading.... </div>
   }
-  debugger;
-  const books = result.data.allBooks
 
   return (
     <div>
@@ -22,7 +37,9 @@ const Books = (props) => {
       <table>
         <tbody>
           <tr>
-            <th></th>
+            <th>
+              title
+            </th>
             <th>
               author
             </th>
@@ -30,15 +47,31 @@ const Books = (props) => {
               published
             </th>
           </tr>
-          {books.map(a =>
-            <tr key={a.title}>
-              <td>{a.title}</td>
-              <td>{a.author.name}</td>
-              <td>{a.published}</td>
-            </tr>
-          )}
+          {books
+            .filter(book => {
+              if (!selectedGenre) {
+                return true
+              }
+              else {
+                if (book.genres.includes(selectedGenre)) {
+                  return true
+                }
+                else return false
+              }
+            })
+            .map(book =>
+              <tr key={book.title}>
+                <td>{book.title}</td>
+                <td>{book.author.name}</td>
+                <td>{book.published}</td>
+              </tr>
+            )}
         </tbody>
       </table>
+      {
+        genres.toArray().map(genre => <button key={genre} onClick = {() => setSelectedGenre(genre)}> {genre} </button>)
+      }
+      <button key={'all-genres'} onClick={() => setSelectedGenre(null)}> all genres </button>
     </div>
   )
 }

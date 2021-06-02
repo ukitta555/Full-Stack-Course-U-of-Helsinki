@@ -13,13 +13,25 @@ const mutationResolvers = {
     if (!currentUser) {
       throw new AuthenticationError("Not authenticated!")
     }
-    const bookToAdd = new Book({ ...args })
+    let bookAuthor = await Author.findOne({name: args.author})
+    if (!bookAuthor) {
+      bookAuthor = new Author({name: args.author, born: null})
+      try {
+        await bookAuthor.save()
+      }
+      catch(error) {
+        throw new UserInputError(error.message, {invalidArgs: args})
+      }
+    }
+    const bookToAdd = new Book({ ...args, author: bookAuthor._id })
     try {
       await bookToAdd.save()
     }
     catch (error) {
       throw new UserInputError(error.message, {invalidArgs: args})
     }
+    await bookToAdd.populate('author').execPopulate()
+    console.log(bookToAdd)
     return bookToAdd
   },
   addAuthor: async (root, args) => {

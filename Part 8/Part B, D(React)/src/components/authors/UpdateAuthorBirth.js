@@ -4,7 +4,7 @@ import { ALL_AUTHORS, UPDATE_AUTHOR_BIRTH } from '../queries/queries'
 import Select from 'react-select'
 
 
-const UpdateAuthorBirth = ({ authors }) => {
+const UpdateAuthorBirth = ({ authors, token }) => {
   const [name, setName] = useState(null)
   const [year, setYear] = useState(0)
   const [updateBirth] = useMutation(
@@ -15,6 +15,7 @@ const UpdateAuthorBirth = ({ authors }) => {
       ]
     })
 
+  if (!token) return null
 
   const options = authors.map(author => {
     return {

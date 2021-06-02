@@ -5,9 +5,9 @@ import { ALL_AUTHORS } from '../queries/queries'
 import UpdateAuthorBirth from './UpdateAuthorBirth'
 
 
-const Authors = (props) => {
+const Authors = ({show, token}) => {
   const result = useQuery(ALL_AUTHORS)
-  if (!props.show) {
+  if (!show) {
     return null
   }
 
@@ -23,7 +23,9 @@ const Authors = (props) => {
         <table>
           <tbody>
             <tr>
-              <th></th>
+              <th>
+                name
+              </th>
               <th>
                 born
             </th>
@@ -41,7 +43,10 @@ const Authors = (props) => {
           </tbody>
         </table>
       </div>
-      <UpdateAuthorBirth authors = {authors}/>
+      <UpdateAuthorBirth
+        authors = {authors}
+        token = {token}
+      />
     </>
   )
 }
