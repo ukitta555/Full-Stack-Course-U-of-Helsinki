@@ -5,7 +5,7 @@ import { LOGIN } from './queries/queries'
 const Login = ({ show, setToken, setPage }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [login, result] = useMutation(LOGIN, {
+  const [login] = useMutation(LOGIN, {
     onError: (error) => console.log(error.graphQLErrors[0].message)
   })
   if (!show) return null

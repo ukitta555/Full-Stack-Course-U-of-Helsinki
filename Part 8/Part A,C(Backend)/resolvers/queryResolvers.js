@@ -9,7 +9,7 @@ const queryResolvers = {
     return Author.countDocuments({})
   },
   allBooks: async (root, args) => {
-    let searchOptions
+    let searchOptions = {}
     if (args.author) {
       searchOptions.author = args.author
     }

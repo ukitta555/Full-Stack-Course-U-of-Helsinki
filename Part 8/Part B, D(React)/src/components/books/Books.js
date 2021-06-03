@@ -7,12 +7,10 @@ import BookList from './BookList'
 const Books = (props) => {
   const result = useQuery(ALL_BOOKS)
   const [genres, setGenres] = useState(Set([]))
-  const [books, setBooks] = useState([])
   const [selectedGenre, setSelectedGenre] = useState(null)
 
   useEffect(() => {
     if (result.data) {
-      setBooks(result.data.allBooks)
       let allGenres = Set([])
       for (let book of result.data.allBooks) {
         for (let genre of book.genres) {
@@ -36,7 +34,6 @@ const Books = (props) => {
       <h2>books</h2>
 
       <BookList
-        books={books}
         selectedGenre={selectedGenre}
       />
       {

@@ -76,3 +76,18 @@ query getFavouriteGenre{
   }
 }
 `
+
+export const GET_BOOKS_BY_GENRE = gql`
+query getBooksByGenre($genre: String) {
+  allBooks(
+    genre: $genre
+  ) {
+    author {
+       name
+     }
+     published
+     title
+     id
+  }
+}
+`
