@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { useQuery } from '@apollo/client'
-import { ALL_BOOKS } from '../queries/queries'
+import { GET_BOOKS_BY_GENRE } from '../queries/queries'
 import { Set } from 'immutable'
 import BookList from './BookList'
 
 const Books = (props) => {
-  const result = useQuery(ALL_BOOKS)
+  const result = useQuery(GET_BOOKS_BY_GENRE, {variables: {genre: null}})
   const [genres, setGenres] = useState(Set([]))
   const [selectedGenre, setSelectedGenre] = useState(null)
 

@@ -88,6 +88,7 @@ query getBooksByGenre($genre: String) {
      published
      title
      id
+     genres
   }
 }
 `
