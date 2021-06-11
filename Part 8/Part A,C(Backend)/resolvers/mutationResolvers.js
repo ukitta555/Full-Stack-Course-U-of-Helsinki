@@ -1,9 +1,11 @@
 const SECRETS = require('../utils/config')
 const Book = require('../models/book')
 const Author = require('../models/author')
+const pubSub = require('./pubSub')
 const User = require ('../models/user')
 const jwt = require('jsonwebtoken')
 const { UserInputError, AuthenticationError } = require('apollo-server-errors')
+
 
 
 const JWT_SECRET = SECRETS.JWT_SECRET
@@ -15,7 +17,7 @@ const mutationResolvers = {
     }
     let bookAuthor = await Author.findOne({name: args.author})
     if (!bookAuthor) {
-      bookAuthor = new Author({name: args.author, born: null})
+      bookAuthor = new Author({name: args.author, born: null, books: []})
       try {
         await bookAuthor.save()
       }
@@ -26,12 +28,16 @@ const mutationResolvers = {
     const bookToAdd = new Book({ ...args, author: bookAuthor._id })
     try {
       await bookToAdd.save()
+      await bookAuthor.update({books: [...bookAuthor.books, bookToAdd._id]})
     }
     catch (error) {
       throw new UserInputError(error.message, {invalidArgs: args})
     }
     await bookToAdd.populate('author').execPopulate()
+
+    pubSub.publish('BOOK_ADDED', {bookAdded: bookToAdd})
     console.log(bookToAdd)
+
     return bookToAdd
   },
   addAuthor: async (root, args) => {

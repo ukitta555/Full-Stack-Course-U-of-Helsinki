@@ -92,3 +92,25 @@ query getBooksByGenre($genre: String) {
   }
 }
 `
+
+export const BOOK_DETAILS = gql`
+fragment BookDetails on Book {
+  author {
+    name
+  }
+  published
+  title
+  id
+  genres
+ }
+`
+
+export const BOOK_ADDED = gql`
+ subscription {
+   bookAdded {
+     ...BookDetails
+   }
+ }
+
+ ${BOOK_DETAILS}
+`

@@ -5,6 +5,7 @@ const QUERY_TYPE = require('./queryType')
 const MUTATION_TYPE = require('./mutationType')
 const USER_TYPE = require ('./userType')
 const TOKEN_TYPE = require('./tokenType')
+const SUBSCRIPTION_TYPE = require('./subscriptionType')
 
 
 const rootType = gql`
@@ -19,6 +20,8 @@ const rootType = gql`
   ${USER_TYPE}
 
   ${TOKEN_TYPE}
+
+  ${SUBSCRIPTION_TYPE}
 `
 
 module.exports = rootType

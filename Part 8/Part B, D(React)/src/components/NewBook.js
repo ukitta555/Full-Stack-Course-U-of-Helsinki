@@ -12,19 +12,13 @@ const NewBook = (props) => {
   const [createBook] = useMutation(CREATE_BOOK, {
     refetchQueries: [{ query: GET_BOOKS_BY_GENRE, variables: {genre: null} }, {query: ALL_AUTHORS}],
     update: (store, {data: {addBook}}) => {
-      console.log(addBook)
-      console.log(store)
-
       addBook.genres.map (genre => {
-        //debugger;
         const dataInStore = store.readQuery({query: GET_BOOKS_BY_GENRE, variables: {genre}})
-        console.log(dataInStore)
         if (dataInStore) {
           const updatedCache = {
             ...dataInStore,
             allBooks: [...dataInStore.allBooks, addBook],
           }
-          console.log('updatedCache:', updatedCache)
           store.writeQuery({
             query: GET_BOOKS_BY_GENRE,
             variables: { genre },

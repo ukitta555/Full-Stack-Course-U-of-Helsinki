@@ -13,6 +13,8 @@ mongoose.connect(SECRETS.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology:
   .then(() => console.log('connected to MongoDB'))
   .catch((err) => console.log(err.message))
 
+mongoose.set('debug', true);
+
 const typeDefs = rootType
 
 const resolvers = rootResolver
@@ -31,6 +33,7 @@ const server = new ApolloServer({
   }
 })
 
-server.listen().then(({ url }) => {
+server.listen().then(({ url, subscriptionsUrl }) => {
   console.log(`Server ready at ${url}`)
+  console.log(`Subscriptions ready at ${subscriptionsUrl}`)
 })
