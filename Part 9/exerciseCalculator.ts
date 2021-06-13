@@ -8,7 +8,10 @@ interface Result {
   average: number
 }
 
-console.log(process.argv[2])
+
+interface ErrorResult {
+  error: string
+}
 
 const calculateExercises = (dailyExercises: Array<number>, target: number): Result => {
   let average;
@@ -36,30 +39,65 @@ const calculateExercises = (dailyExercises: Array<number>, target: number): Resu
   return {
     periodLength: dailyExercises.length,
     trainingDays: dailyExercises.reduce((accumulator, currentValue) => {
-      return currentValue ? (accumulator + 1) : (accumulator)
+      return currentValue ? (accumulator + 1) : (accumulator);
     }, 0),
     success: (average > target),
     rating,
     ratingDescription,
     target,
     average
+  };
+};
+
+
+export const parseApiArguments = (args: Record<string, unknown>): Result | ErrorResult => {
+  if (args) {
+    if (!args.daily_exercises || args.target === undefined) {
+      return { error: "parameters missing" };
+    }
+    else if (
+      Array.isArray(args.daily_exercises)
+      && args.daily_exercises.length > 0
+      && !args.daily_exercises.some((ex: unknown) => (typeof ex !== 'number') || (typeof ex === 'number' && ex < 0))
+      && typeof args.target === 'number'
+      && args.target > 0
+      ) {
+        return calculateExercises(args.daily_exercises, args.target);
+    }
+    else return { error: "malformatted parameters" };
   }
-}
+  else return { error: "parameters missing" };
+};
 
+const parseArguments = (args: Array<string>): Result | ErrorResult => {
+  if (args.length >= 4) {
 
-const target = Number(process.argv[2]);
+    if (!args[2]) {
+      return { error: "parameters missing" };
+    }
 
-if (!target) {
-  throw new Error("bruh numeric input!");
-}
+    const target = Number(process.argv[2]);
 
-let dailyExercises = [];
-let i = 2;
-while (process.argv[++i]) {
-  if (isNaN(Number(process.argv[i]))) {
-    throw new Error ("bruh numeric input!");
+    if (!target) {
+      return { error: "malformatted parameters" };
+    }
+
+    const dailyExercises = [];
+    let i = 2;
+    while (args[++i]) {
+      if (isNaN(Number(args[i]))) {
+        return { error: "malformatted parameters" };
+      }
+      dailyExercises.push(Number(process.argv[i]));
+    }
+
+    if (dailyExercises.length === 0) {
+      return { error: "parameters missing" };
+    }
+    console.log(calculateExercises(dailyExercises, target));
   }
-  dailyExercises.push(Number(process.argv[i]));
-}
+  return { error: "This function should be called in console mode only!" };
+};
 
-console.log(calculateExercises(dailyExercises, target))
+parseArguments(process.argv);
+
