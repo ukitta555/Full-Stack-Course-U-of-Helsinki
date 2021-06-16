@@ -1,5 +1,5 @@
 {
   "eslint.workingDirectories": [
-    "Patientor_BackEnd","Patientor_FrontEnd"
+    "Patientor_BackEnd","Patientor_FrontEnd","react_sample", "Intro"
   ]
 }
